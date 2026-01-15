@@ -1,0 +1,10 @@
+This patch file documents the changes needed for ExecutionPlan.tsx
+
+Key Changes Required:
+1. Import additional icons: Trash2, Plus, Calendar
+2. Destructure new functions from useSalesData: addMarketingCollateral, deleteMarketingCollateral, addCRMTimeline, deleteCRMTimeline
+3. Add state for creating new items
+4. Marketing Section: Add "Add New" button, delete functionality, remove conditional rendering
+5. CRM Section: Add "Add New" button, delete functionality, timeline styling, date sorting
+
+Due to file complexity, implementing via comprehensive file rewrite.

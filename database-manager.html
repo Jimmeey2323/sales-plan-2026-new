@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Database Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold text-gray-900 mb-6">Neon Database Manager</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <button 
+                    onclick="checkConnection()" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Test Connection
+                </button>
+                <button 
+                    onclick="loadData()" 
+                    class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                >
+                    Load Data
+                </button>
+                <button 
+                    onclick="clearDatabase()" 
+                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                >
+                    Clear Database
+                </button>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4">
+                <h2 class="text-lg font-semibold mb-2">Database Status</h2>
+                <div id="status" class="text-gray-600">
+                    Ready to connect...
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-lg p-4 mt-6">
+                <h2 class="text-lg font-semibold mb-2">Data Viewer</h2>
+                <div class="bg-white border rounded p-4 h-96 overflow-auto">
+                    <pre id="dataViewer" class="text-sm text-gray-800">
+No data loaded yet. Click "Load Data" to view current database contents.
+                    </pre>
+                </div>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+                <h3 class="text-yellow-800 font-semibold">Note:</h3>
+                <p class="text-yellow-700 text-sm mt-1">
+                    This page connects directly to the Neon database to view and manage sales data. 
+                    All changes made in the main application are automatically saved to this database.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { neon } from 'https://cdn.skypack.dev/@neondatabase/serverless';
+
+        const DATABASE_URL = 'postgresql://neondb_owner:npg_adL9B0uIREhP@ep-dry-sound-a15m8a9a-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
+        const sql = neon(DATABASE_URL);
+
+        window.checkConnection = async function() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = 'Testing connection...';
+            
+            try {
+                const result = await sql`SELECT version()`;
+                statusDiv.innerHTML = `<span class="text-green-600">✓ Connected successfully</span><br><span class="text-sm text-gray-500">PostgreSQL Version: ${result[0].version}</span>`;
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="text-red-600">✗ Connection failed: ${error.message}</span>`;
+            }
+        };
+
+        window.loadData = async function() {
+            const statusDiv = document.getElementById('status');
+            const dataViewer = document.getElementById('dataViewer');
+            
+            statusDiv.innerHTML = 'Loading data...';
+            
+            try {
+                const result = await sql`
+                    SELECT data, updated_at FROM sales_data 
+                    ORDER BY updated_at DESC 
+                    LIMIT 1
+                `;
+                
+                if (result.length > 0) {
+                    const data = result[0].data;
+                    const updatedAt = new Date(result[0].updated_at).toLocaleString();
+                    
+                    statusDiv.innerHTML = `<span class="text-green-600">✓ Data loaded successfully</span><br><span class="text-sm text-gray-500">Last updated: ${updatedAt}</span>`;
+                    dataViewer.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    statusDiv.innerHTML = '<span class="text-yellow-600">⚠ No data found in database</span>';
+                    dataViewer.textContent = 'No data found in the database.';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="text-red-600">✗ Failed to load data: ${error.message}</span>`;
+                dataViewer.textContent = 'Error loading data.';
+            }
+        };
+
+        window.clearDatabase = async function() {
+            if (!confirm('Are you sure you want to clear all data from the database? This cannot be undone.')) {
+                return;
+            }
+            
+            const statusDiv = document.getElementById('status');
+            const dataViewer = document.getElementById('dataViewer');
+            
+            statusDiv.innerHTML = 'Clearing database...';
+            
+            try {
+                await sql`DELETE FROM sales_data`;
+                statusDiv.innerHTML = '<span class="text-green-600">✓ Database cleared successfully</span>';
+                dataViewer.textContent = 'Database cleared.';
+            } catch (error) {
+                statusDiv.innerHTML = `<span class="text-red-600">✗ Failed to clear database: ${error.message}</span>`;
+            }
+        };
+
+        // Auto-load data when page loads
+        window.addEventListener('load', () => {
+            checkConnection();
+            setTimeout(loadData, 1000);
+        });
+    </script>
+</body>
+</html>

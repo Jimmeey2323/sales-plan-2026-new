@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Database with Revised Offers</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #c026d3;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #c026d3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #a21caf;
+        }
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d1fae5;
+            border: 2px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        .log {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .log-entry {
+            margin: 5px 0;
+        }
+        .error {
+            color: #dc2626;
+        }
+        .success-text {
+            color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Update Database with Revised Offers</h1>
+        <p>This will update your Neon database with the latest offer data from the spreadsheet.</p>
+        
+        <div class="warning">
+            <strong>⚠️ Important:</strong> This will replace all existing offers with the revised data. Make sure you have a backup if needed.
+        </div>
+
+        <button id="updateBtn" onclick="updateDatabase()">Update Database Now</button>
+        <button onclick="window.location.href='/'">Back to App</button>
+
+        <div id="success" class="success">
+            <strong>✅ Database Updated Successfully!</strong>
+            <p>The database has been updated with all revised offers. <a href="/">Return to app</a> to see the changes.</p>
+        </div>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script type="module">
+        import { neon } from 'https://cdn.jsdelivr.net/npm/@neondatabase/serverless@latest/+esm';
+
+        const DATABASE_URL = 'postgresql://neondb_owner:npg_adL9B0uIREhP@ep-dry-sound-a15m8a9a-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require';
+        const sql = neon(DATABASE_URL);
+
+        function log(message, isError = false) {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + (isError ? 'error' : 'success-text');
+            entry.textContent = `${new Date().toLocaleTimeString()} - ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        // New offer data from spreadsheet
+        const REVISED_DATA = [
+          {
+            id: 'jan',
+            name: 'January',
+            theme: 'The Resolution Reset',
+            summary: 'Critical acquisition month focusing on aggressive newcomer conversion and maximizing "Cash Upfront" via annual lock-ins. Targeting 35% YoY growth.',
+            revenueTargetTotal: '₹54,30,000',
+            offers: [
+              {
+                id: Math.random().toString(36).substr(2, 9),
+                title: 'Resolution Rehab',
+                type: 'New',
+                description: '1-month unlimited membership for newcomers—the perfect entry point to turn New Year resolutions into actual results.',
+                pricing: '1 Month Unlimited',
+                priceMumbai: 17750,
+                priceBengaluru: 13900,
+                finalPriceMumbai: 11999,
+                finalPriceBengaluru: 10499,
+                discountPercent: 32,
+                savings: '₹ 5751 (Mumbai) / ₹ 3401 (Bengaluru)',
+                whyItWorks: 'Turn your New Year\'s promises into actual progress with unlimited classes for newcomers who are finally ready to stop lying to themselves.',
+                targetUnits: 45,
+                targetUnitsMumbai: 30,
+                targetUnitsBengaluru: 15,
+                promoteOnAds: true,
+                cancelled: false,
+                marketingCollateral: 'Email campaign, WhatsApp blasts, Instagram stories with testimonials',
+                operationalSupport: 'Welcome kit with branded water bottle and resistance band'
+              },
+              {
+                id: Math.random().toString(36).substr(2, 9),
+                title: 'Buy 3, Get 4, Attend 2',
+                type: 'Hero',
+                description: 'Purchase 3 months unlimited and receive your 4th month completely free—designed to help build lasting fitness habits through consistency.',
+                pricing: 'Pay for 3, Get 4 Months',
+                priceMumbai: 71000,
+                priceBengaluru: 55600,
+                finalPriceMumbai: 53250,
+                finalPriceBengaluru: 41700,
+                discountPercent: 25,
+                savings: '₹ 17750 (Mumbai) / ₹ 13900 (Bengaluru)',
+                whyItWorks: 'Commit to three months and get the fourth free—perfect for building consistency even if your actual attendance tells a different story.',
+                targetUnits: 15,
+                targetUnitsMumbai: 10,
+                targetUnitsBengaluru: 5,
+                promoteOnAds: true,
+                cancelled: false,
+                marketingCollateral: 'Landing page, Meta ads creative highlighting habit formation science',
+                operationalSupport: '21-Day Challenge Kit with progress tracker'
+              }
+            ]
+          }
+          // Add more months here...
+        ];
+
+        window.updateDatabase = async function() {
+            const btn = document.getElementById('updateBtn');
+            const successDiv = document.getElementById('success');
+            
+            try {
+                btn.disabled = true;
+                btn.textContent = 'Updating...';
+                log('Starting database update...');
+
+                // Check if table exists and has data
+                log('Checking existing data...');
+                const existing = await sql`SELECT id FROM sales_data LIMIT 1`;
+                
+                if (existing.length > 0) {
+                    log(`Found existing data (ID: ${existing[0].id})`);
+                    log('Updating with revised offers...');
+                    
+                    await sql`
+                        UPDATE sales_data 
+                        SET data = ${JSON.stringify(REVISED_DATA)}, 
+                            updated_at = CURRENT_TIMESTAMP 
+                        WHERE id = ${existing[0].id}
+                    `;
+                    log('✅ Database updated successfully!');
+                } else {
+                    log('No existing data found. Inserting new data...');
+                    await sql`
+                        INSERT INTO sales_data (data) 
+                        VALUES (${JSON.stringify(REVISED_DATA)})
+                    `;
+                    log('✅ Data inserted successfully!');
+                }
+
+                successDiv.style.display = 'block';
+                btn.textContent = 'Update Complete ✓';
+                log('🎉 All done! You can now return to the app.');
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, true);
+                btn.disabled = false;
+                btn.textContent = 'Retry Update';
+            }
+        };
+    </script>
+</body>
+</html>

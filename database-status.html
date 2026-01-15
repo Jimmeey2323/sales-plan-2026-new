@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Status</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1f2937;
+            text-align: center;
+        }
+        .status-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .status-card h2 {
+            margin-top: 0;
+            color: #374151;
+            font-size: 18px;
+        }
+        .loading {
+            background: #e0e7ff;
+            border-color: #6366f1;
+        }
+        .success {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        .error {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #4f46e5;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🗄️ Database Connection Status</h1>
+    
+    <div id="neonStatus" class="status-card loading">
+        <h2>Neon Database</h2>
+        <div id="neonInfo">Checking connection...</div>
+    </div>
+    
+    <div id="localStorageStatus" class="status-card">
+        <h2>LocalStorage</h2>
+        <div id="localStorageInfo">Loading...</div>
+    </div>
+    
+    <div class="actions">
+        <button onclick="checkStatus()">🔄 Refresh Status</button>
+        <button onclick="window.location.href='/reset-data.html'">🗑️ Clear All Data</button>
+        <button onclick="window.location.href='/'">🏠 Back to App</button>
+    </div>
+    
+    <script type="module">
+        import { loadSalesData, initializeDatabase } from './lib/neon.ts';
+        
+        async function checkNeonStatus() {
+            const statusDiv = document.getElementById('neonStatus');
+            const infoDiv = document.getElementById('neonInfo');
+            
+            try {
+                // Try to initialize database
+                const initResult = await initializeDatabase();
+                
+                if (!initResult.success) {
+                    throw new Error('Failed to initialize database');
+                }
+                
+                // Try to load data
+                const data = await loadSalesData();
+                
+                statusDiv.className = 'status-card success';
+                
+                if (data && Array.isArray(data)) {
+                    const totalOffers = data.reduce((sum, month) => sum + month.offers.length, 0);
+                    infoDiv.innerHTML = `
+                        <div class="info">✅ Connected to Neon Database</div>
+                        <div class="info">📊 Months: ${data.length}</div>
+                        <div class="info">📦 Total Offers: ${totalOffers}</div>
+                        <div class="info">🔗 Database: Neon PostgreSQL</div>
+                    `;
+                } else {
+                    infoDiv.innerHTML = `
+                        <div class="info">✅ Connected (No data found)</div>
+                        <div class="info">💡 Data will be loaded from constants.ts on first app load</div>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.className = 'status-card error';
+                infoDiv.innerHTML = `
+                    <div class="info">❌ Connection Failed</div>
+                    <div class="info">Error: ${error.message}</div>
+                    <div class="info">💡 App will use localStorage fallback</div>
+                `;
+            }
+        }
+        
+        function checkLocalStorageStatus() {
+            const statusDiv = document.getElementById('localStorageStatus');
+            const infoDiv = document.getElementById('localStorageInfo');
+            
+            try {
+                const saved = localStorage.getItem('physique57_sales_plan_v1');
+                
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    const totalOffers = data.reduce((sum, month) => sum + month.offers.length, 0);
+                    
+                    statusDiv.className = 'status-card success';
+                    infoDiv.innerHTML = `
+                        <div class="info">✅ LocalStorage Active</div>
+                        <div class="info">📊 Months: ${data.length}</div>
+                        <div class="info">📦 Total Offers: ${totalOffers}</div>
+                        <div class="info">💾 Size: ${(saved.length / 1024).toFixed(2)} KB</div>
+                    `;
+                } else {
+                    statusDiv.className = 'status-card';
+                    infoDiv.innerHTML = `
+                        <div class="info">ℹ️ No LocalStorage data</div>
+                        <div class="info">💡 Will be created on first app load</div>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.className = 'status-card error';
+                infoDiv.innerHTML = `
+                    <div class="info">❌ Error reading localStorage</div>
+                    <div class="info">Error: ${error.message}</div>
+                `;
+            }
+        }
+        
+        window.checkStatus = function() {
+            checkNeonStatus();
+            checkLocalStorageStatus();
+        };
+        
+        // Run checks on page load
+        checkNeonStatus();
+        checkLocalStorageStatus();
+    </script>
+</body>
+</html>
