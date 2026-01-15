@@ -1132,34 +1132,43 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
         )}
       </div>
 
-      {/* Marketing Collateral Requirements */}
+      {/* Creative Asset Pipeline - Modern Sophisticated Design */}
       {(marketingCollateral.length > 0 || isAdmin) && (
-      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200 overflow-hidden shadow-lg">
-        <div className="bg-white/70 backdrop-blur-sm px-8 py-6 border-b border-emerald-200">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Megaphone className="w-6 h-6 text-white" />
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50">
+        {/* Header with glass morphism */}
+        <div className="relative px-8 py-8 border-b border-slate-700/50 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/5 to-transparent rounded-full blur-3xl" />
+          
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-5">
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/25">
+                <Megaphone className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h4 className="text-2xl font-bold text-pink-900">Creative Asset Pipeline</h4>
-                <p className="text-pink-700 font-medium">Design requirements organized by campaign offers</p>
+                <h4 className="text-2xl font-bold text-white tracking-tight">Creative Asset Pipeline</h4>
+                <p className="text-slate-400 font-medium mt-1">Design requirements organized by campaign offers</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               {marketingCollateral.length > 0 && (
+                <span className="px-4 py-2 bg-slate-700/50 rounded-full text-sm font-semibold text-slate-300 border border-slate-600/50">
+                  {marketingCollateral.length} Assets
+                </span>
+              )}
+              {marketingCollateral.length > 0 && (
                 <button
                   onClick={() => requireAdmin(() => deleteAllMarketingCollateral(month.id))}
                   disabled={!isAdmin}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
                     isAdmin
-                      ? 'bg-red-500 text-white hover:bg-red-600 cursor-pointer'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                      ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 cursor-pointer'
+                      : 'bg-slate-700/30 text-slate-500 cursor-not-allowed opacity-50'
                   }`}
                   title={isAdmin ? 'Clear all requirements' : 'Admin access required'}
                 >
                   <Trash2 className="w-4 h-4" />
-                  Clear All
+                  Clear
                 </button>
               )}
               <button
@@ -1176,10 +1185,10 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
                   });
                 })}
                 disabled={!isAdmin}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 font-medium ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-medium ${
                   isAdmin
-                    ? 'bg-pink-600 text-white hover:bg-pink-700 cursor-pointer'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/25 cursor-pointer'
+                    : 'bg-slate-700/30 text-slate-500 cursor-not-allowed opacity-50'
                 }`}
                 title={isAdmin ? 'Add creative asset' : 'Admin access required'}
               >
@@ -1190,22 +1199,22 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
           </div>
         </div>
           
-        <div className="p-8 bg-gradient-to-br from-white to-pink-50/30">
+        <div className="p-8">
           {marketingCollateral.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Megaphone className="w-12 h-12 text-pink-500" />
+              <div className="w-24 h-24 bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-slate-600/50">
+                <Megaphone className="w-12 h-12 text-slate-500" />
               </div>
-              <h5 className="text-xl font-bold text-slate-800 mb-3">No Creative Assets Planned</h5>
-              <p className="text-slate-600 text-lg mb-2">Start by selecting collateral types in your offer cards</p>
+              <h5 className="text-xl font-bold text-white mb-3">No Creative Assets Planned</h5>
+              <p className="text-slate-400 text-lg mb-2">Start by selecting collateral types in your offer cards</p>
               <p className="text-slate-500 mb-8 max-w-md mx-auto">Or manually add specific design requirements for your marketing campaigns</p>
               <button
                 onClick={() => requireAdmin(() => setShowNewMarketing(true))}
                 disabled={!isAdmin}
-                className={`px-8 py-4 rounded-xl transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${
+                className={`px-8 py-4 rounded-xl transition-all font-semibold ${
                   isAdmin 
-                    ? 'bg-pink-600 text-white hover:bg-pink-700 cursor-pointer' 
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/25 cursor-pointer' 
+                    : 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
                 }`}
                 title={isAdmin ? 'Create Asset Request' : 'Admin access required'}
               >
@@ -1213,34 +1222,34 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
               </button>
             </div>
           ) : (
-            <div className="overflow-hidden bg-white rounded-2xl shadow-xl border border-slate-200">
+            <div className="overflow-hidden bg-slate-800/50 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[1600px]">
-                  <thead className="bg-gradient-to-r from-pink-700 to-rose-700">
+                  <thead className="bg-slate-800/80">
                     <tr className="h-14">
-                      <th className="w-40 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Offer</th>
-                      <th className="w-32 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Asset Type</th>
-                      <th className="w-64 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Requirements</th>
-                      <th className="w-64 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Creative Message</th>
-                      <th className="w-48 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Notes & Specs</th>
-                      <th className="w-48 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">CTA Links</th>
-                      <th className="w-32 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Channel</th>
-                      <th className="w-28 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Due Date</th>
-                      <th className="w-24 px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">Status</th>
-                      <th className="w-32 px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">Actions</th>
+                      <th className="w-40 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Offer</th>
+                      <th className="w-32 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Asset Type</th>
+                      <th className="w-64 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Requirements</th>
+                      <th className="w-64 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Creative Message</th>
+                      <th className="w-48 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Notes & Specs</th>
+                      <th className="w-48 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">CTA Links</th>
+                      <th className="w-32 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Channel</th>
+                      <th className="w-28 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Due Date</th>
+                      <th className="w-24 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                      <th className="w-32 px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-slate-200">
+                  <tbody className="divide-y divide-slate-700/50">
                     {marketingCollateral.map((item, index) => {
                       const isEditing = editingMarketing === item.id;
                       const displayItem = isEditing ? { ...item, ...tempMarketing } : item;
                       
                       return (
-                        <tr key={item.id || index} className="min-h-16 hover:bg-pink-50 transition-all duration-200 bg-white">
+                        <tr key={item.id || index} className="min-h-16 hover:bg-slate-700/30 transition-all duration-200">
                           <td className="px-6 py-4 align-top">
                             <div className="flex items-start pt-1">
-                              <div className="w-2 h-2 bg-pink-500 rounded-full mr-3 mt-2 animate-pulse flex-shrink-0"></div>
-                              <div className="text-sm font-semibold text-slate-900 leading-relaxed">{displayItem.offer}</div>
+                              <div className="w-2 h-2 bg-amber-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
+                              <div className="text-sm font-semibold text-white leading-relaxed">{displayItem.offer}</div>
                             </div>
                           </td>
                           <td className="px-6 py-4 align-top">
@@ -1249,10 +1258,10 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
                                 type="text"
                                 value={displayItem.type}
                                 onChange={(e) => setTempMarketing({...tempMarketing, type: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none"
+                                className="w-full px-3 py-2 text-sm border border-amber-500/50 rounded-lg bg-slate-700 text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 outline-none"
                               />
                             ) : (
-                              <div className="text-sm font-medium text-slate-700 leading-relaxed">
+                              <div className="text-sm font-medium text-slate-300 leading-relaxed">
                                 {displayItem.type}
                               </div>
                             )}

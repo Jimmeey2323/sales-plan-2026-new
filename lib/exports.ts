@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableCell, TableRow, WidthType } from 'docx';
 import { MonthData } from '../types';
 
-// Generate PDF Export - Modern Professional Styling
+// Generate PDF Export - Ultra Modern Minimalist Professional Styling
 export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', currentMonth?: MonthData) {
   const exportData = scope === 'current' && currentMonth ? [currentMonth] : data;
   
@@ -12,16 +12,19 @@ export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', c
   container.style.width = '900px';
   container.style.padding = '0';
   container.style.backgroundColor = 'white';
-  container.style.fontFamily = "'Inter', 'Segoe UI', Arial, sans-serif";
+  container.style.fontFamily = "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif";
   
-  // Build HTML content with modern professional styling
+  // Build HTML content with ultra-modern minimalist styling
   let html = `
     <style>
+      * { box-sizing: border-box; }
       .pdf-container { background: white; }
+      
+      /* Cover Page - Editorial Minimalist */
       .cover-page {
-        min-height: 400px;
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
-        padding: 80px 60px;
+        min-height: 500px;
+        background: #0a0a0a;
+        padding: 80px;
         position: relative;
         overflow: hidden;
       }
@@ -29,151 +32,329 @@ export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', c
         content: '';
         position: absolute;
         top: 0;
+        left: 0;
         right: 0;
-        width: 300px;
-        height: 300px;
-        background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.2) 100%);
-        border-radius: 50%;
-        transform: translate(50%, -50%);
+        height: 4px;
+        background: linear-gradient(90deg, #d4af37, #c9a227, #b8860b);
       }
-      .cover-page::after {
-        content: '';
+      .cover-accent {
         position: absolute;
         bottom: 0;
-        left: 0;
-        width: 200px;
-        height: 200px;
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(168, 85, 247, 0.1) 100%);
-        border-radius: 50%;
-        transform: translate(-50%, 50%);
+        right: 0;
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
       }
+      
+      /* Month Sections - Clean & Sophisticated */
       .month-section {
-        padding: 50px 60px;
-        border-bottom: 1px solid #e2e8f0;
+        padding: 60px 70px;
+        background: #ffffff;
         page-break-after: always;
+        position: relative;
       }
+      .month-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 70px;
+        right: 70px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #e5e5e5, transparent);
+      }
+      
+      /* Month Header - Elegant Typography */
       .month-header {
         display: flex;
         align-items: flex-start;
-        gap: 24px;
-        margin-bottom: 40px;
-        padding-bottom: 30px;
-        border-bottom: 2px solid #f1f5f9;
+        gap: 40px;
+        margin-bottom: 50px;
+        padding-bottom: 40px;
+        border-bottom: 1px solid #f0f0f0;
       }
-      .month-badge {
-        background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      .month-indicator {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         color: white;
-        padding: 16px 24px;
-        border-radius: 16px;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        text-align: center;
-        min-width: 80px;
-        box-shadow: 0 4px 14px -3px rgba(124, 58, 237, 0.4);
+        flex-shrink: 0;
       }
+      .month-indicator .month-abbr {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .month-indicator .year {
+        font-size: 11px;
+        opacity: 0.6;
+        margin-top: 2px;
+      }
+      
+      /* Offer Grid - Card System */
       .offer-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 40px;
+      }
+      .offer-card {
+        background: #fafafa;
+        border: 1px solid #ebebeb;
+        border-radius: 16px;
+        padding: 28px;
+        transition: all 0.3s ease;
+      }
+      .offer-card:hover {
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      }
+      
+      /* Type Badges - Refined */
+      .offer-type-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+      .type-hero { background: linear-gradient(135deg, #1a1a1a, #333); color: #d4af37; }
+      .type-new { background: #e8f4f8; color: #0891b2; }
+      .type-flash { background: #fef3c7; color: #b45309; }
+      .type-retention { background: #ecfdf5; color: #059669; }
+      .type-event { background: #fdf2f8; color: #be185d; }
+      .type-lapsed { background: #f5f5f5; color: #525252; }
+      
+      /* Pricing Display - Clean */
+      .pricing-row {
+        display: flex;
+        gap: 16px;
+        margin-top: 20px;
+        padding: 20px;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #f0f0f0;
+      }
+      .location-price {
+        flex: 1;
+        text-align: center;
+        padding: 12px;
+      }
+      .location-price:first-child {
+        border-right: 1px solid #f0f0f0;
+      }
+      .location-label {
+        font-size: 10px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+      .original-price {
+        font-size: 12px;
+        color: #999;
+        text-decoration: line-through;
+      }
+      .final-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-top: 4px;
+      }
+      .target-units {
+        font-size: 11px;
+        color: #d4af37;
+        margin-top: 6px;
+        font-weight: 500;
+      }
+      
+      /* Revenue Block */
+      .revenue-block {
+        text-align: right;
+        padding: 24px 32px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 16px;
+        border: 1px solid #e8e8e8;
+      }
+      .revenue-label {
+        font-size: 11px;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 500;
+      }
+      .revenue-value {
+        font-size: 32px;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-top: 8px;
+        letter-spacing: -1px;
+      }
+      
+      /* Section Headers */
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .section-line {
+        width: 24px;
+        height: 2px;
+        background: linear-gradient(90deg, #d4af37, #b8860b);
+        border-radius: 1px;
+      }
+      .section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1a1a1a;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .section-count {
+        background: #f5f5f5;
+        color: #666;
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      
+      /* Studio Targets Grid */
+      .targets-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 20px;
         margin-top: 30px;
       }
-      .offer-card {
-        background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
+      .target-card {
         padding: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+        border-radius: 14px;
+        text-align: center;
+        border: 1px solid #ebebeb;
       }
-      .offer-type-badge {
-        display: inline-block;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 700;
+      .target-location {
+        font-size: 11px;
+        color: #888;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 1.5px;
+        font-weight: 600;
         margin-bottom: 12px;
       }
-      .type-hero { background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%); color: #7c3aed; }
-      .type-new { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #2563eb; }
-      .type-flash { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #d97706; }
-      .type-retention { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #16a34a; }
-      .type-event { background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); color: #db2777; }
-      .type-lapsed { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: #64748b; }
-      .pricing-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
+      .target-amount {
+        font-size: 26px;
+        font-weight: 800;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+      }
+      .target-logic {
+        font-size: 11px;
+        color: #888;
+        margin-top: 8px;
+        line-height: 1.4;
+      }
+      
+      /* Insight Box */
+      .insight-box {
         margin-top: 16px;
         padding: 16px;
-        background: #f8fafc;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        border-radius: 10px;
+        border-left: 3px solid #d4af37;
       }
-      .pricing-location {
-        text-align: center;
-        padding: 12px;
-        background: white;
-        border-radius: 8px;
-        border: 1px solid #e2e8f0;
+      .insight-text {
+        color: #78716c;
+        font-size: 12px;
+        font-style: italic;
+        line-height: 1.6;
       }
-      .stats-bar {
-        display: flex;
-        gap: 20px;
-        margin-top: 20px;
-        padding: 20px;
-        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        border-radius: 12px;
-        border: 1px solid #bbf7d0;
+      
+      /* Discount Badge */
+      .discount-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #b45309;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        margin-right: 8px;
       }
-      .stat-item {
-        text-align: center;
-        flex: 1;
+      .ads-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 600;
       }
     </style>
     
     <div class="pdf-container">
-      <!-- Cover Page -->
+      <!-- Cover Page - Editorial Minimalist -->
       <div class="cover-page">
+        <div class="cover-accent"></div>
         <div style="position: relative; z-index: 1;">
-          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 40px;">
-            <div style="width: 60px; height: 60px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-family: Georgia, serif; font-size: 32px; font-weight: bold; color: #7c3aed; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);">P</div>
+          
+          <!-- Logo & Brand -->
+          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 80px;">
+            <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #d4af37, #b8860b); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+              <span style="color: #0a0a0a; font-size: 28px; font-weight: 800;">57</span>
+            </div>
             <div>
-              <h1 style="color: white; font-size: 32px; margin: 0; font-weight: 700; letter-spacing: -0.5px;">Physique 57 India</h1>
-              <p style="color: #94a3b8; font-size: 14px; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Premium Fitness Studios</p>
+              <h1 style="color: white; font-size: 24px; margin: 0; font-weight: 700; letter-spacing: 1px;">Physique 57</h1>
+              <p style="color: #666; font-size: 12px; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 4px; font-weight: 500;">India</p>
             </div>
           </div>
           
-          <h2 style="color: white; font-size: 52px; margin: 60px 0 20px 0; font-weight: 800; line-height: 1.1; letter-spacing: -1px;">
-            2026 Sales<br/>
-            <span style="background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Masterplan</span>
-          </h2>
+          <!-- Main Title -->
+          <div style="margin-bottom: 60px;">
+            <p style="color: #d4af37; font-size: 12px; text-transform: uppercase; letter-spacing: 4px; margin: 0 0 16px 0; font-weight: 600;">Strategic Planning Document</p>
+            <h2 style="color: white; font-size: 56px; margin: 0; font-weight: 800; line-height: 1.1; letter-spacing: -2px;">
+              2026 Sales<br/>Masterplan
+            </h2>
+          </div>
           
-          <p style="color: #cbd5e1; font-size: 18px; max-width: 400px; line-height: 1.6; margin-bottom: 40px;">
-            Strategic revenue optimization through targeted offers, seasonal campaigns, and customer lifecycle management.
+          <!-- Description -->
+          <p style="color: #888; font-size: 16px; max-width: 450px; line-height: 1.8; margin-bottom: 60px;">
+            A comprehensive revenue strategy encompassing targeted offers, seasonal campaigns, and customer lifecycle optimization across all studio locations.
           </p>
           
-          <div style="display: flex; gap: 30px; margin-top: 50px;">
-            <div style="text-align: center;">
-              <div style="font-size: 36px; font-weight: 800; color: white;">${exportData.length}</div>
-              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Months Planned</div>
+          <!-- Stats -->
+          <div style="display: flex; gap: 60px; padding-top: 40px; border-top: 1px solid #222;">
+            <div>
+              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">${exportData.length}</div>
+              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Months</div>
             </div>
-            <div style="width: 1px; background: #475569;"></div>
-            <div style="text-align: center;">
-              <div style="font-size: 36px; font-weight: 800; color: white;">${exportData.reduce((acc, m) => acc + m.offers.filter(o => !o.cancelled).length, 0)}</div>
-              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Active Offers</div>
+            <div>
+              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">${exportData.reduce((acc, m) => acc + m.offers.filter(o => !o.cancelled).length, 0)}</div>
+              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Active Offers</div>
             </div>
-            <div style="width: 1px; background: #475569;"></div>
-            <div style="text-align: center;">
-              <div style="font-size: 36px; font-weight: 800; color: white;">3</div>
-              <div style="font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">Studio Locations</div>
+            <div>
+              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">3</div>
+              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Studios</div>
             </div>
           </div>
           
-          <div style="position: absolute; bottom: 30px; right: 60px; text-align: right;">
-            <p style="color: #64748b; font-size: 12px; margin: 0;">Generated: ${new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-            <p style="color: #475569; font-size: 11px; margin: 4px 0 0 0;">Confidential Business Document</p>
+          <!-- Footer -->
+          <div style="position: absolute; bottom: 60px; right: 80px; text-align: right;">
+            <p style="color: #444; font-size: 11px; margin: 0; letter-spacing: 1px;">${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p style="color: #333; font-size: 10px; margin: 6px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Confidential</p>
           </div>
         </div>
       </div>
@@ -189,25 +370,30 @@ export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', c
     
     html += `
       <div class="month-section">
+        <!-- Month Header -->
         <div class="month-header">
-          <div class="month-badge">${month.name.substring(0, 3).toUpperCase()}<br/><span style="font-size: 10px; opacity: 0.8;">2026</span></div>
-          <div style="flex: 1;">
-            <h3 style="color: #0f172a; font-size: 28px; margin: 0 0 8px 0; font-weight: 700;">${month.name}</h3>
-            <h4 style="color: #7c3aed; font-size: 18px; margin: 0 0 12px 0; font-weight: 600;">${month.theme}</h4>
-            <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0; max-width: 600px;">${month.summary}</p>
+          <div class="month-indicator">
+            <span class="month-abbr">${month.name.substring(0, 3)}</span>
+            <span class="year">2026</span>
           </div>
-          <div style="text-align: right; padding: 16px 24px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; border: 1px solid #bbf7d0;">
-            <div style="font-size: 11px; color: #16a34a; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Revenue Target</div>
-            <div style="font-size: 24px; color: #15803d; font-weight: 800; margin-top: 4px;">${month.revenueTargetTotal}</div>
+          <div style="flex: 1;">
+            <h3 style="color: #1a1a1a; font-size: 32px; margin: 0 0 8px 0; font-weight: 800; letter-spacing: -1px;">${month.name}</h3>
+            <h4 style="color: #d4af37; font-size: 16px; margin: 0 0 16px 0; font-weight: 600; letter-spacing: 0.5px;">${month.theme}</h4>
+            <p style="color: #666; font-size: 14px; line-height: 1.7; margin: 0; max-width: 500px;">${month.summary}</p>
+          </div>
+          <div class="revenue-block">
+            <div class="revenue-label">Revenue Target</div>
+            <div class="revenue-value">${month.revenueTargetTotal}</div>
           </div>
         </div>
         
-        <div style="margin-bottom: 30px;">
-          <h5 style="color: #374151; font-size: 16px; margin: 0 0 20px 0; font-weight: 700; display: flex; align-items: center; gap: 10px;">
-            <span style="width: 4px; height: 20px; background: linear-gradient(135deg, #7c3aed, #a855f7); border-radius: 2px;"></span>
-            Strategic Offers
-            <span style="background: #f1f5f9; color: #64748b; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">${activeOffers.length} Active</span>
-          </h5>
+        <!-- Strategic Offers -->
+        <div style="margin-bottom: 50px;">
+          <div class="section-header">
+            <div class="section-line"></div>
+            <span class="section-title">Strategic Offers</span>
+            <span class="section-count">${activeOffers.length} Active</span>
+          </div>
           
           <div class="offer-grid">
             ${activeOffers.map(offer => {
@@ -222,38 +408,36 @@ export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', c
               return `
                 <div class="offer-card">
                   <span class="offer-type-badge ${getTypeClass(offer.type)}">${offer.type}</span>
-                  <h6 style="color: #0f172a; font-size: 16px; font-weight: 700; margin: 0 0 8px 0; line-height: 1.3;">${offer.title}</h6>
-                  <p style="color: #64748b; font-size: 12px; margin: 0 0 12px 0; line-height: 1.5;">${offer.description}</p>
+                  <h6 style="color: #1a1a1a; font-size: 17px; font-weight: 700; margin: 0 0 10px 0; line-height: 1.4;">${offer.title}</h6>
+                  <p style="color: #666; font-size: 13px; margin: 0; line-height: 1.6;">${offer.description}</p>
                   
-                  <div class="pricing-grid">
-                    <div class="pricing-location">
-                      <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Mumbai</div>
+                  <div class="pricing-row">
+                    <div class="location-price">
+                      <div class="location-label">Mumbai</div>
                       ${offer.priceMumbai ? `
-                        <div style="font-size: 11px; color: #94a3b8; text-decoration: line-through;">₹${offer.priceMumbai.toLocaleString('en-IN')}</div>
-                        <div style="font-size: 16px; color: #0f172a; font-weight: 700;">₹${(offer.finalPriceMumbai || offer.priceMumbai).toLocaleString('en-IN')}</div>
-                        ${offer.targetUnitsMumbai ? `<div style="font-size: 10px; color: #7c3aed; margin-top: 4px;">${offer.targetUnitsMumbai} units target</div>` : ''}
-                      ` : '<div style="color: #94a3b8; font-size: 12px;">N/A</div>'}
+                        <div class="original-price">₹${offer.priceMumbai.toLocaleString('en-IN')}</div>
+                        <div class="final-price">₹${(offer.finalPriceMumbai || offer.priceMumbai).toLocaleString('en-IN')}</div>
+                        ${offer.targetUnitsMumbai ? `<div class="target-units">${offer.targetUnitsMumbai} units</div>` : ''}
+                      ` : '<div style="color: #ccc; font-size: 13px;">—</div>'}
                     </div>
-                    <div class="pricing-location">
-                      <div style="font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Bengaluru</div>
+                    <div class="location-price">
+                      <div class="location-label">Bengaluru</div>
                       ${offer.priceBengaluru ? `
-                        <div style="font-size: 11px; color: #94a3b8; text-decoration: line-through;">₹${offer.priceBengaluru.toLocaleString('en-IN')}</div>
-                        <div style="font-size: 16px; color: #0f172a; font-weight: 700;">₹${(offer.finalPriceBengaluru || offer.priceBengaluru).toLocaleString('en-IN')}</div>
-                        ${offer.targetUnitsBengaluru ? `<div style="font-size: 10px; color: #7c3aed; margin-top: 4px;">${offer.targetUnitsBengaluru} units target</div>` : ''}
-                      ` : '<div style="color: #94a3b8; font-size: 12px;">N/A</div>'}
+                        <div class="original-price">₹${offer.priceBengaluru.toLocaleString('en-IN')}</div>
+                        <div class="final-price">₹${(offer.finalPriceBengaluru || offer.priceBengaluru).toLocaleString('en-IN')}</div>
+                        ${offer.targetUnitsBengaluru ? `<div class="target-units">${offer.targetUnitsBengaluru} units</div>` : ''}
+                      ` : '<div style="color: #ccc; font-size: 13px;">—</div>'}
                     </div>
                   </div>
                   
-                  <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                      ${offer.discountPercent ? `<span style="background: #fef3c7; color: #d97706; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 600;">${offer.discountPercent}% OFF</span>` : ''}
-                      ${offer.promoteOnAds ? `<span style="background: #dbeafe; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 600;">📢 Ads</span>` : ''}
-                    </div>
+                  <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px;">
+                    ${offer.discountPercent ? `<span class="discount-badge">${offer.discountPercent}% OFF</span>` : ''}
+                    ${offer.promoteOnAds ? `<span class="ads-badge">📢 Ads Active</span>` : ''}
                   </div>
                   
-                  <p style="color: #64748b; font-size: 11px; font-style: italic; margin: 12px 0 0 0; line-height: 1.4; padding: 10px; background: #f8fafc; border-radius: 8px;">
-                    💡 ${offer.whyItWorks}
-                  </p>
+                  <div class="insight-box">
+                    <p class="insight-text">💡 ${offer.whyItWorks}</p>
+                  </div>
                 </div>
               `;
             }).join('')}
@@ -261,17 +445,17 @@ export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', c
         </div>
         
         ${month.financialTargets && month.financialTargets.length > 0 ? `
-          <div style="margin-top: 30px;">
-            <h5 style="color: #374151; font-size: 16px; margin: 0 0 20px 0; font-weight: 700; display: flex; align-items: center; gap: 10px;">
-              <span style="width: 4px; height: 20px; background: linear-gradient(135deg, #059669, #10b981); border-radius: 2px;"></span>
-              Studio Targets
-            </h5>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+          <div>
+            <div class="section-header">
+              <div class="section-line"></div>
+              <span class="section-title">Studio Targets</span>
+            </div>
+            <div class="targets-grid">
               ${month.financialTargets.map(target => `
-                <div style="padding: 20px; background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 12px; border: 1px solid #bbf7d0; text-align: center;">
-                  <div style="font-size: 11px; color: #16a34a; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 8px;">${target.location}</div>
-                  <div style="font-size: 24px; color: #15803d; font-weight: 800;">${target.revenueTarget}</div>
-                  <div style="font-size: 11px; color: #64748b; margin-top: 6px;">${target.logic}</div>
+                <div class="target-card">
+                  <div class="target-location">${target.location}</div>
+                  <div class="target-amount">${target.revenueTarget}</div>
+                  <div class="target-logic">${target.logic}</div>
                 </div>
               `).join('')}
             </div>

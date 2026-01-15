@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MonthDetail } from './components/MonthDetail';
 import { YearOverview } from './components/YearOverview';
 import { SalesProvider, useSalesData } from './context/SalesContext';
@@ -28,6 +28,8 @@ import {
 import { MonthData } from './types';
 import { exportToPDF, exportToWord, exportToImage, copyEmailToClipboard } from './lib/exports';
 import { clearSalesData } from './lib/neon';
+import confetti from 'canvas-confetti';
+import physique57Logo from './assets/physique57-logo.png';
 
 // Advanced Export Modal Component
 const ExportModal: React.FC<{
@@ -351,18 +353,22 @@ const DashboardContent: React.FC = () => {
           {!sidebarCollapsed ? (
             <>
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-serif font-bold text-lg shadow-sm">
-                  P
-                </div>
+                <img 
+                  src={physique57Logo} 
+                  alt="Physique 57" 
+                  className="w-10 h-10 rounded-lg object-cover shadow-sm"
+                />
                 <span className="font-serif font-bold text-xl tracking-tight text-gray-900">Physique 57, India</span>
               </div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold pl-10">2026 Sales Plan</p>
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold pl-12">2026 Sales Plan</p>
             </>
           ) : (
             <div className="flex justify-center">
-              <div className="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl shadow-sm">
-                P
-              </div>
+              <img 
+                src={physique57Logo} 
+                alt="Physique 57" 
+                className="w-10 h-10 rounded-lg object-cover shadow-sm"
+              />
             </div>
           )}
         </div>

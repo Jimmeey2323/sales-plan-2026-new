@@ -17,6 +17,7 @@
   "test": "vitest",
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
+    "canvas-confetti": "^1.9.4",
     "docx": "^9.5.1",
     "framer-motion": "^12.24.10",
     "html-docx-js": "^0.3.1",
