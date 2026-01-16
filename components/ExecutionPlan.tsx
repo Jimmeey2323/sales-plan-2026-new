@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MonthData, Offer, MarketingCollateral, CRMTimeline } from '../types';
-import { Target, TrendingUp, Users, DollarSign, Package, Megaphone, ListTodo, Edit2, Save, X, Trash2, Plus, Calendar, Wand2 } from 'lucide-react';
+import { Target, TrendingUp, Users, DollarSign, Package, Megaphone, ListTodo, Edit2, Save, X, Trash2, Plus, Calendar, Wand2, Palette } from 'lucide-react';
 import { useSalesData } from '../context/SalesContext';
 import { useAdmin } from '../context/AdminContext';
 import OfferGeneratorModal from './OfferGeneratorModal';
@@ -1132,27 +1132,24 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
         )}
       </div>
 
-      {/* Creative Asset Pipeline - Modern Sophisticated Design */}
+      {/* Creative Asset Pipeline - Clean Professional Design */}
       {(marketingCollateral.length > 0 || isAdmin) && (
-      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700/50">
-        {/* Header with glass morphism */}
-        <div className="relative px-8 py-8 border-b border-slate-700/50 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-rose-500/10 to-purple-500/10" />
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-500/5 to-transparent rounded-full blur-3xl" />
-          
-          <div className="relative flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/25">
-                <Megaphone className="w-7 h-7 text-white" />
+      <div className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100">
+        {/* Header */}
+        <div className="px-8 py-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Palette className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h4 className="text-2xl font-bold text-white tracking-tight">Creative Asset Pipeline</h4>
-                <p className="text-slate-400 font-medium mt-1">Design requirements organized by campaign offers</p>
+                <h4 className="text-xl font-bold text-gray-900 tracking-tight">Creative Asset Pipeline</h4>
+                <p className="text-gray-500 text-sm mt-0.5">Design requirements organized by campaign</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               {marketingCollateral.length > 0 && (
-                <span className="px-4 py-2 bg-slate-700/50 rounded-full text-sm font-semibold text-slate-300 border border-slate-600/50">
+                <span className="px-3 py-1.5 bg-indigo-50 rounded-full text-sm font-medium text-indigo-700 border border-indigo-100">
                   {marketingCollateral.length} Assets
                 </span>
               )}
@@ -1160,15 +1157,15 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
                 <button
                   onClick={() => requireAdmin(() => deleteAllMarketingCollateral(month.id))}
                   disabled={!isAdmin}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                     isAdmin
-                      ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30 cursor-pointer'
-                      : 'bg-slate-700/30 text-slate-500 cursor-not-allowed opacity-50'
+                      ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 cursor-pointer'
+                      : 'bg-gray-50 text-gray-400 cursor-not-allowed'
                   }`}
                   title={isAdmin ? 'Clear all requirements' : 'Admin access required'}
                 >
                   <Trash2 className="w-4 h-4" />
-                  Clear
+                  Clear All
                 </button>
               )}
               <button
@@ -1185,36 +1182,35 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
                   });
                 })}
                 disabled={!isAdmin}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-medium ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   isAdmin
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/25 cursor-pointer'
-                    : 'bg-slate-700/30 text-slate-500 cursor-not-allowed opacity-50'
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md cursor-pointer'
+                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 }`}
                 title={isAdmin ? 'Add creative asset' : 'Admin access required'}
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-4 h-4" />
                 Add Asset
               </button>
             </div>
           </div>
         </div>
           
-        <div className="p-8">
+        <div className="p-6">
           {marketingCollateral.length === 0 ? (
-            <div className="text-center py-16">
-              <div className="w-24 h-24 bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-slate-600/50">
-                <Megaphone className="w-12 h-12 text-slate-500" />
+            <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
+                <Palette className="w-8 h-8 text-gray-400" />
               </div>
-              <h5 className="text-xl font-bold text-white mb-3">No Creative Assets Planned</h5>
-              <p className="text-slate-400 text-lg mb-2">Start by selecting collateral types in your offer cards</p>
-              <p className="text-slate-500 mb-8 max-w-md mx-auto">Or manually add specific design requirements for your marketing campaigns</p>
+              <h5 className="text-lg font-semibold text-gray-900 mb-2">No Creative Assets Planned</h5>
+              <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">Start by selecting collateral types in your offer cards or add specific design requirements</p>
               <button
                 onClick={() => requireAdmin(() => setShowNewMarketing(true))}
                 disabled={!isAdmin}
-                className={`px-8 py-4 rounded-xl transition-all font-semibold ${
+                className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-all ${
                   isAdmin 
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-600 hover:to-orange-600 shadow-lg shadow-amber-500/25 cursor-pointer' 
-                    : 'bg-slate-700 text-slate-500 cursor-not-allowed opacity-50'
+                    ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md cursor-pointer' 
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
                 title={isAdmin ? 'Create Asset Request' : 'Admin access required'}
               >
@@ -1222,165 +1218,150 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
               </button>
             </div>
           ) : (
-            <div className="overflow-hidden bg-slate-800/50 rounded-2xl border border-slate-700/50 backdrop-blur-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1600px]">
-                  <thead className="bg-slate-800/80">
-                    <tr className="h-14">
-                      <th className="w-40 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Offer</th>
-                      <th className="w-32 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Asset Type</th>
-                      <th className="w-64 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Requirements</th>
-                      <th className="w-64 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Creative Message</th>
-                      <th className="w-48 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Notes & Specs</th>
-                      <th className="w-48 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">CTA Links</th>
-                      <th className="w-32 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Channel</th>
-                      <th className="w-28 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Due Date</th>
-                      <th className="w-24 px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Status</th>
-                      <th className="w-32 px-6 py-4 text-center text-xs font-bold text-slate-400 uppercase tracking-wider">Actions</th>
+                <table className="w-full min-w-[1400px]">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <th className="w-36 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Offer</th>
+                      <th className="w-28 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Type</th>
+                      <th className="w-56 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Requirements</th>
+                      <th className="w-56 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Message</th>
+                      <th className="w-40 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Notes</th>
+                      <th className="w-40 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">CTA</th>
+                      <th className="w-28 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Channel</th>
+                      <th className="w-24 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Due</th>
+                      <th className="w-20 px-5 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                      <th className="w-28 px-5 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-700/50">
+                  <tbody className="divide-y divide-gray-100">
                     {marketingCollateral.map((item, index) => {
                       const isEditing = editingMarketing === item.id;
                       const displayItem = isEditing ? { ...item, ...tempMarketing } : item;
                       
                       return (
-                        <tr key={item.id || index} className="min-h-16 hover:bg-slate-700/30 transition-all duration-200">
-                          <td className="px-6 py-4 align-top">
-                            <div className="flex items-start pt-1">
-                              <div className="w-2 h-2 bg-amber-500 rounded-full mr-3 mt-2 flex-shrink-0"></div>
-                              <div className="text-sm font-semibold text-white leading-relaxed">{displayItem.offer}</div>
+                        <tr key={item.id || index} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="px-5 py-4 align-top">
+                            <div className="flex items-center gap-2">
+                              <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full flex-shrink-0"></div>
+                              <span className="text-sm font-medium text-gray-900">{displayItem.offer}</span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={displayItem.type}
                                 onChange={(e) => setTempMarketing({...tempMarketing, type: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-amber-500/50 rounded-lg bg-slate-700 text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30 outline-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg bg-white text-gray-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                               />
                             ) : (
-                              <div className="text-sm font-medium text-slate-300 leading-relaxed">
+                              <span className="inline-flex px-2.5 py-1 bg-gray-100 text-gray-700 rounded-md text-xs font-medium">
                                 {displayItem.type}
-                              </div>
+                              </span>
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <textarea
                                 value={displayItem.collateralNeeded}
                                 onChange={(e) => setTempMarketing({...tempMarketing, collateralNeeded: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none resize-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none resize-none"
                                 rows={2}
                                 placeholder="Asset requirements..."
                               />
                             ) : (
-                              <div className="text-sm text-slate-900 leading-relaxed">{displayItem.collateralNeeded}</div>
+                              <p className="text-sm text-gray-700 leading-relaxed">{displayItem.collateralNeeded}</p>
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <textarea
                                 value={displayItem.messaging || ''}
                                 onChange={(e) => setTempMarketing({...tempMarketing, messaging: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none resize-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none resize-none"
                                 rows={3}
                                 placeholder="Message for the creative..."
                               />
                             ) : (
-                              <div className="text-sm text-slate-700 leading-relaxed italic">
-                                {displayItem.messaging ? (
-                                  <div className="bg-purple-50 p-3 rounded-lg border border-purple-200">
-                                    <div className="text-xs font-semibold text-purple-700 uppercase tracking-wider mb-1">Creative Message</div>
-                                    <div className="text-sm text-purple-900">"{displayItem.messaging}"</div>
-                                  </div>
-                                ) : (
-                                  <span className="text-gray-400">No message specified</span>
-                                )}
-                              </div>
+                              displayItem.messaging ? (
+                                <div className="bg-violet-50 p-2.5 rounded-lg border border-violet-100">
+                                  <p className="text-sm text-violet-800 italic">"{displayItem.messaging}"</p>
+                                </div>
+                              ) : (
+                                <span className="text-sm text-gray-400">—</span>
+                              )
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <textarea
                                 value={displayItem.notes || ''}
                                 onChange={(e) => setTempMarketing({...tempMarketing, notes: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none resize-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none resize-none"
                                 rows={2}
-                                placeholder="Additional notes, specs..."
+                                placeholder="Additional notes..."
                               />
                             ) : (
-                              <div className="text-sm text-slate-600 leading-relaxed">
-                                {displayItem.notes ? (
-                                  <div className="bg-gray-50 p-2 rounded border border-gray-200">
-                                    <div className="text-xs font-medium text-gray-600 uppercase tracking-wide mb-1">Notes</div>
-                                    <div className="text-sm text-gray-700">{displayItem.notes}</div>
-                                  </div>
-                                ) : (
-                                  <span className="text-gray-400">No notes</span>
-                                )}
-                              </div>
+                              displayItem.notes ? (
+                                <p className="text-sm text-gray-600">{displayItem.notes}</p>
+                              ) : (
+                                <span className="text-sm text-gray-400">—</span>
+                              )
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <textarea
                                 value={displayItem.ctaLinks || ''}
                                 onChange={(e) => setTempMarketing({...tempMarketing, ctaLinks: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none resize-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none resize-none"
                                 rows={2}
-                                placeholder="CTA links, URLs..."
+                                placeholder="CTA links..."
                               />
                             ) : (
-                              <div className="text-sm text-slate-600 leading-relaxed">
-                                {displayItem.ctaLinks ? (
-                                  <div className="bg-blue-50 p-2 rounded border border-blue-200">
-                                    <div className="text-xs font-medium text-blue-600 uppercase tracking-wide mb-1">CTA Links</div>
-                                    <div className="text-sm text-blue-700 break-all">{displayItem.ctaLinks}</div>
-                                  </div>
-                                ) : (
-                                  <span className="text-gray-400">No CTA links</span>
-                                )}
-                              </div>
+                              displayItem.ctaLinks ? (
+                                <div className="bg-blue-50 p-2 rounded-lg border border-blue-100">
+                                  <p className="text-xs text-blue-700 break-all">{displayItem.ctaLinks}</p>
+                                </div>
+                              ) : (
+                                <span className="text-sm text-gray-400">—</span>
+                              )
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={displayItem.medium}
                                 onChange={(e) => setTempMarketing({...tempMarketing, medium: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                               />
                             ) : (
-                              <div className="text-sm font-medium text-slate-700 leading-relaxed">
-                                {displayItem.medium}
-                              </div>
+                              <span className="text-sm text-gray-700">{displayItem.medium}</span>
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
+                          <td className="px-5 py-4 align-top">
                             {isEditing ? (
                               <input
                                 type="text"
                                 value={displayItem.dueDate}
                                 onChange={(e) => setTempMarketing({...tempMarketing, dueDate: e.target.value})}
-                                className="w-full px-3 py-2 text-sm border border-pink-300 rounded-lg focus:border-pink-500 focus:ring-1 focus:ring-pink-200 outline-none"
+                                className="w-full px-3 py-2 text-sm border border-indigo-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                               />
                             ) : (
-                              <div className="text-sm font-medium text-slate-700 leading-relaxed">
-                                {displayItem.dueDate || 'Not set'}
-                              </div>
+                              <span className="text-sm text-gray-600">{displayItem.dueDate || '—'}</span>
                             )}
                           </td>
-                          <td className="px-6 py-4 align-top">
-                            <span className="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-yellow-100 text-yellow-800">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-bounce"></div>
+                          <td className="px-5 py-4 align-top">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                              <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
                               Pending
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-center align-top">
-                            <div className="flex justify-center gap-2 pt-1">
+                          <td className="px-5 py-4 text-center align-top">
+                            <div className="flex justify-center gap-1.5">
                               <button
                                 onClick={() => requireAdmin(() => {
                                   if (isEditing) {
@@ -1395,49 +1376,39 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
                                   }
                                 })}
                                 disabled={!isAdmin}
-                                className={`p-2 rounded-lg transition-all hover:scale-110 ${
+                                className={`p-1.5 rounded-md transition-all ${
                                   isAdmin 
-                                    ? 'bg-pink-100 hover:bg-pink-200 cursor-pointer' 
-                                    : 'bg-gray-100 cursor-not-allowed opacity-50'
+                                    ? 'hover:bg-indigo-50 text-indigo-600 cursor-pointer' 
+                                    : 'text-gray-300 cursor-not-allowed'
                                 }`}
-                                title={isAdmin 
-                                  ? (isEditing ? 'Save changes' : 'Edit asset')
-                                  : 'Admin access required to edit'
-                                }
+                                title={isAdmin ? (isEditing ? 'Save' : 'Edit') : 'Admin required'}
                               >
-                                {isEditing ? (
-                                  <Save className="w-4 h-4 text-pink-600 animate-pulse" />
-                                ) : (
-                                  <Edit2 className="w-4 h-4 text-pink-600 hover:animate-spin" />
-                                )}
+                                {isEditing ? <Save className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                               </button>
                               {isEditing && (
                                 <button
-                                  onClick={() => {
-                                    setEditingMarketing(null);
-                                    setTempMarketing({});
-                                  }}
-                                  className="p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all hover:scale-110"
-                                  title="Cancel editing"
+                                  onClick={() => { setEditingMarketing(null); setTempMarketing({}); }}
+                                  className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500"
+                                  title="Cancel"
                                 >
-                                  <X className="w-4 h-4 text-gray-600 hover:animate-spin" />
+                                  <X className="w-4 h-4" />
                                 </button>
                               )}
                               <button
                                 onClick={() => requireAdmin(() => {
-                                  if (item.id && confirm('Delete this creative asset requirement?')) {
+                                  if (item.id && confirm('Delete this asset?')) {
                                     deleteMarketingCollateral(month.id, item.id);
                                   }
                                 })}
                                 disabled={!isAdmin}
-                                className={`p-2 rounded-lg transition-all hover:scale-110 ${
+                                className={`p-1.5 rounded-md transition-all ${
                                   isAdmin 
-                                    ? 'bg-red-100 hover:bg-red-200 cursor-pointer' 
-                                    : 'bg-gray-100 cursor-not-allowed opacity-50'
+                                    ? 'hover:bg-red-50 text-red-500 cursor-pointer' 
+                                    : 'text-gray-300 cursor-not-allowed'
                                 }`}
-                                title={isAdmin ? 'Delete asset' : 'Admin access required to delete'}
+                                title={isAdmin ? 'Delete' : 'Admin required'}
                               >
-                                <Trash2 className="w-4 h-4 text-red-600 hover:animate-bounce" />
+                                <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
                           </td>
@@ -1449,59 +1420,55 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
               </div>
               
               {/* Summary Footer */}
-              <div className="bg-slate-50 px-6 py-4 border-t border-slate-200">
+              <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
                 <div className="flex justify-between items-center">
-                  <div className="text-sm text-slate-600">
-                    <span className="font-semibold">{marketingCollateral.length}</span> creative assets across{' '}
-                    <span className="font-semibold">{Object.keys(groupedMarketing).length}</span> offers
-                  </div>
-                  <div className="flex gap-4 text-xs">
-                    <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                      <span>Pending: {marketingCollateral.length}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span>Complete: 0</span>
-                    </div>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold text-gray-900">{marketingCollateral.length}</span> assets across{' '}
+                    <span className="font-semibold text-gray-900">{Object.keys(groupedMarketing).length}</span> offers
+                  </p>
+                  <div className="flex gap-4 text-xs text-gray-500">
+                    <span className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 bg-amber-400 rounded-full"></div>
+                      Pending: {marketingCollateral.length}
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
+                      Complete: 0
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           )}
           
-          {/* Quick Add Asset Button */}
-          <div className="mt-6 text-center">
+          {/* Quick Add Buttons */}
+          <div className="mt-6 flex justify-center gap-3">
             <button
               onClick={() => requireAdmin(() => setShowNewMarketing(true))}
               disabled={!isAdmin}
-              className={`px-6 py-3 rounded-xl transition-all font-semibold group ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isAdmin 
-                  ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white hover:shadow-lg cursor-pointer' 
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                  ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm cursor-pointer' 
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               }`}
               title={isAdmin ? 'Add Creative Asset' : 'Admin access required'}
             >
-              <span className="flex items-center gap-2">
-                <Plus className="w-4 h-4 group-hover:rotate-90 transition-transform" />
-                Add Creative Asset
-              </span>
+              <Plus className="w-4 h-4" />
+              Add Creative Asset
             </button>
             
             <button
               onClick={() => requireAdmin(() => setShowOfferGenerator(true))}
               disabled={!isAdmin}
-              className={`px-6 py-3 rounded-xl transition-all font-semibold hover:shadow-lg group ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isAdmin
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white cursor-pointer'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                  ? 'bg-purple-600 text-white hover:bg-purple-700 shadow-sm cursor-pointer'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
               }`}
               title={isAdmin ? 'Generate Custom Offers' : 'Admin access required'}
             >
-              <span className="flex items-center gap-2">
-                <Wand2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
-                Offer Generator
-              </span>
+              <Wand2 className="w-4 h-4" />
+              Offer Generator
             </button>
           </div>
         </div>
