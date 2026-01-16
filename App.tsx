@@ -29,7 +29,7 @@ import { MonthData } from './types';
 import { exportToPDF, exportToWord, exportToImage, copyEmailToClipboard } from './lib/exports';
 import { clearSalesData } from './lib/neon';
 import confetti from 'canvas-confetti';
-import physique57Logo from './assets/physique57-logo.png';
+import physique57Logo from '@/src/assets/physique57-logo.png';
 
 // Advanced Export Modal Component
 const ExportModal: React.FC<{
