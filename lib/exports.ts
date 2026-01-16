@@ -3,508 +3,325 @@ import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableCell, TableRow, WidthType } from 'docx';
 import { MonthData } from '../types';
 
-// Generate PDF Export - Ultra Modern Minimalist Professional Styling
+// Generate PDF Export - Using jsPDF native methods (no html2canvas)
 export async function exportToPDF(data: MonthData[], scope: 'current' | 'all', currentMonth?: MonthData) {
   const exportData = scope === 'current' && currentMonth ? [currentMonth] : data;
   
-  // Create a temporary container for rendering
-  const container = document.createElement('div');
-  container.style.width = '900px';
-  container.style.padding = '0';
-  container.style.backgroundColor = 'white';
-  container.style.fontFamily = "'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif";
-  
-  // Build HTML content with ultra-modern minimalist styling
-  let html = `
-    <style>
-      * { box-sizing: border-box; }
-      .pdf-container { background: white; }
-      
-      /* Cover Page - Editorial Minimalist */
-      .cover-page {
-        min-height: 500px;
-        background: #0a0a0a;
-        padding: 80px;
-        position: relative;
-        overflow: hidden;
-      }
-      .cover-page::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #d4af37, #c9a227, #b8860b);
-      }
-      .cover-accent {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 400px;
-        height: 400px;
-        background: linear-gradient(135deg, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
-      }
-      
-      /* Month Sections - Clean & Sophisticated */
-      .month-section {
-        padding: 60px 70px;
-        background: #ffffff;
-        page-break-after: always;
-        position: relative;
-      }
-      .month-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 70px;
-        right: 70px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #e5e5e5, transparent);
-      }
-      
-      /* Month Header - Elegant Typography */
-      .month-header {
-        display: flex;
-        align-items: flex-start;
-        gap: 40px;
-        margin-bottom: 50px;
-        padding-bottom: 40px;
-        border-bottom: 1px solid #f0f0f0;
-      }
-      .month-indicator {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        border-radius: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        flex-shrink: 0;
-      }
-      .month-indicator .month-abbr {
-        font-size: 18px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-      }
-      .month-indicator .year {
-        font-size: 11px;
-        opacity: 0.6;
-        margin-top: 2px;
-      }
-      
-      /* Offer Grid - Card System */
-      .offer-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-top: 40px;
-      }
-      .offer-card {
-        background: #fafafa;
-        border: 1px solid #ebebeb;
-        border-radius: 16px;
-        padding: 28px;
-        transition: all 0.3s ease;
-      }
-      .offer-card:hover {
-        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      }
-      
-      /* Type Badges - Refined */
-      .offer-type-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 14px;
-        border-radius: 100px;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 16px;
-      }
-      .type-hero { background: linear-gradient(135deg, #1a1a1a, #333); color: #d4af37; }
-      .type-new { background: #e8f4f8; color: #0891b2; }
-      .type-flash { background: #fef3c7; color: #b45309; }
-      .type-retention { background: #ecfdf5; color: #059669; }
-      .type-event { background: #fdf2f8; color: #be185d; }
-      .type-lapsed { background: #f5f5f5; color: #525252; }
-      
-      /* Pricing Display - Clean */
-      .pricing-row {
-        display: flex;
-        gap: 16px;
-        margin-top: 20px;
-        padding: 20px;
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #f0f0f0;
-      }
-      .location-price {
-        flex: 1;
-        text-align: center;
-        padding: 12px;
-      }
-      .location-price:first-child {
-        border-right: 1px solid #f0f0f0;
-      }
-      .location-label {
-        font-size: 10px;
-        color: #888;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
-      }
-      .original-price {
-        font-size: 12px;
-        color: #999;
-        text-decoration: line-through;
-      }
-      .final-price {
-        font-size: 20px;
-        font-weight: 700;
-        color: #1a1a1a;
-        margin-top: 4px;
-      }
-      .target-units {
-        font-size: 11px;
-        color: #d4af37;
-        margin-top: 6px;
-        font-weight: 500;
-      }
-      
-      /* Revenue Block */
-      .revenue-block {
-        text-align: right;
-        padding: 24px 32px;
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        border-radius: 16px;
-        border: 1px solid #e8e8e8;
-      }
-      .revenue-label {
-        font-size: 11px;
-        color: #888;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        font-weight: 500;
-      }
-      .revenue-value {
-        font-size: 32px;
-        font-weight: 800;
-        color: #1a1a1a;
-        margin-top: 8px;
-        letter-spacing: -1px;
-      }
-      
-      /* Section Headers */
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 24px;
-      }
-      .section-line {
-        width: 24px;
-        height: 2px;
-        background: linear-gradient(90deg, #d4af37, #b8860b);
-        border-radius: 1px;
-      }
-      .section-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: #1a1a1a;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-      }
-      .section-count {
-        background: #f5f5f5;
-        color: #666;
-        padding: 4px 12px;
-        border-radius: 100px;
-        font-size: 11px;
-        font-weight: 600;
-      }
-      
-      /* Studio Targets Grid */
-      .targets-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        margin-top: 30px;
-      }
-      .target-card {
-        padding: 24px;
-        background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-        border-radius: 14px;
-        text-align: center;
-        border: 1px solid #ebebeb;
-      }
-      .target-location {
-        font-size: 11px;
-        color: #888;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        font-weight: 600;
-        margin-bottom: 12px;
-      }
-      .target-amount {
-        font-size: 26px;
-        font-weight: 800;
-        color: #1a1a1a;
-        letter-spacing: -0.5px;
-      }
-      .target-logic {
-        font-size: 11px;
-        color: #888;
-        margin-top: 8px;
-        line-height: 1.4;
-      }
-      
-      /* Insight Box */
-      .insight-box {
-        margin-top: 16px;
-        padding: 16px;
-        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-        border-radius: 10px;
-        border-left: 3px solid #d4af37;
-      }
-      .insight-text {
-        color: #78716c;
-        font-size: 12px;
-        font-style: italic;
-        line-height: 1.6;
-      }
-      
-      /* Discount Badge */
-      .discount-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        color: #b45309;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 10px;
-        font-weight: 700;
-        margin-right: 8px;
-      }
-      .ads-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background: #e0f2fe;
-        color: #0369a1;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 10px;
-        font-weight: 600;
-      }
-    </style>
-    
-    <div class="pdf-container">
-      <!-- Cover Page - Editorial Minimalist -->
-      <div class="cover-page">
-        <div class="cover-accent"></div>
-        <div style="position: relative; z-index: 1;">
-          
-          <!-- Logo & Brand -->
-          <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 80px;">
-            <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #d4af37, #b8860b); border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-              <span style="color: #0a0a0a; font-size: 28px; font-weight: 800;">57</span>
-            </div>
-            <div>
-              <h1 style="color: white; font-size: 24px; margin: 0; font-weight: 700; letter-spacing: 1px;">Physique 57</h1>
-              <p style="color: #666; font-size: 12px; margin: 4px 0 0 0; text-transform: uppercase; letter-spacing: 4px; font-weight: 500;">India</p>
-            </div>
-          </div>
-          
-          <!-- Main Title -->
-          <div style="margin-bottom: 60px;">
-            <p style="color: #d4af37; font-size: 12px; text-transform: uppercase; letter-spacing: 4px; margin: 0 0 16px 0; font-weight: 600;">Strategic Planning Document</p>
-            <h2 style="color: white; font-size: 56px; margin: 0; font-weight: 800; line-height: 1.1; letter-spacing: -2px;">
-              2026 Sales<br/>Masterplan
-            </h2>
-          </div>
-          
-          <!-- Description -->
-          <p style="color: #888; font-size: 16px; max-width: 450px; line-height: 1.8; margin-bottom: 60px;">
-            A comprehensive revenue strategy encompassing targeted offers, seasonal campaigns, and customer lifecycle optimization across all studio locations.
-          </p>
-          
-          <!-- Stats -->
-          <div style="display: flex; gap: 60px; padding-top: 40px; border-top: 1px solid #222;">
-            <div>
-              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">${exportData.length}</div>
-              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Months</div>
-            </div>
-            <div>
-              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">${exportData.reduce((acc, m) => acc + m.offers.filter(o => !o.cancelled).length, 0)}</div>
-              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Active Offers</div>
-            </div>
-            <div>
-              <div style="font-size: 48px; font-weight: 800; color: white; letter-spacing: -2px;">3</div>
-              <div style="font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px;">Studios</div>
-            </div>
-          </div>
-          
-          <!-- Footer -->
-          <div style="position: absolute; bottom: 60px; right: 80px; text-align: right;">
-            <p style="color: #444; font-size: 11px; margin: 0; letter-spacing: 1px;">${new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-            <p style="color: #333; font-size: 10px; margin: 6px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Confidential</p>
-          </div>
-        </div>
-      </div>
-  `;
-  
-  exportData.forEach((month, index) => {
-    const activeOffers = month.offers.filter(o => !o.cancelled);
-    const totalRevenue = activeOffers.reduce((acc, o) => {
-      const mumbaiRev = (o.finalPriceMumbai || o.priceMumbai || 0) * (typeof o.targetUnitsMumbai === 'number' ? o.targetUnitsMumbai : parseInt(o.targetUnitsMumbai as string) || 0);
-      const blrRev = (o.finalPriceBengaluru || o.priceBengaluru || 0) * (typeof o.targetUnitsBengaluru === 'number' ? o.targetUnitsBengaluru : parseInt(o.targetUnitsBengaluru as string) || 0);
-      return acc + mumbaiRev + blrRev;
-    }, 0);
-    
-    html += `
-      <div class="month-section">
-        <!-- Month Header -->
-        <div class="month-header">
-          <div class="month-indicator">
-            <span class="month-abbr">${month.name.substring(0, 3)}</span>
-            <span class="year">2026</span>
-          </div>
-          <div style="flex: 1;">
-            <h3 style="color: #1a1a1a; font-size: 32px; margin: 0 0 8px 0; font-weight: 800; letter-spacing: -1px;">${month.name}</h3>
-            <h4 style="color: #d4af37; font-size: 16px; margin: 0 0 16px 0; font-weight: 600; letter-spacing: 0.5px;">${month.theme}</h4>
-            <p style="color: #666; font-size: 14px; line-height: 1.7; margin: 0; max-width: 500px;">${month.summary}</p>
-          </div>
-          <div class="revenue-block">
-            <div class="revenue-label">Revenue Target</div>
-            <div class="revenue-value">${month.revenueTargetTotal}</div>
-          </div>
-        </div>
-        
-        <!-- Strategic Offers -->
-        <div style="margin-bottom: 50px;">
-          <div class="section-header">
-            <div class="section-line"></div>
-            <span class="section-title">Strategic Offers</span>
-            <span class="section-count">${activeOffers.length} Active</span>
-          </div>
-          
-          <div class="offer-grid">
-            ${activeOffers.map(offer => {
-              const getTypeClass = (type: string) => {
-                const typeMap: {[key: string]: string} = {
-                  'Hero': 'type-hero', 'New': 'type-new', 'Flash': 'type-flash',
-                  'Retention': 'type-retention', 'Event': 'type-event', 'Lapsed': 'type-lapsed'
-                };
-                return typeMap[type] || 'type-new';
-              };
-              
-              return `
-                <div class="offer-card">
-                  <span class="offer-type-badge ${getTypeClass(offer.type)}">${offer.type}</span>
-                  <h6 style="color: #1a1a1a; font-size: 17px; font-weight: 700; margin: 0 0 10px 0; line-height: 1.4;">${offer.title}</h6>
-                  <p style="color: #666; font-size: 13px; margin: 0; line-height: 1.6;">${offer.description}</p>
-                  
-                  <div class="pricing-row">
-                    <div class="location-price">
-                      <div class="location-label">Mumbai</div>
-                      ${offer.priceMumbai ? `
-                        <div class="original-price">₹${offer.priceMumbai.toLocaleString('en-IN')}</div>
-                        <div class="final-price">₹${(offer.finalPriceMumbai || offer.priceMumbai).toLocaleString('en-IN')}</div>
-                        ${offer.targetUnitsMumbai ? `<div class="target-units">${offer.targetUnitsMumbai} units</div>` : ''}
-                      ` : '<div style="color: #ccc; font-size: 13px;">—</div>'}
-                    </div>
-                    <div class="location-price">
-                      <div class="location-label">Bengaluru</div>
-                      ${offer.priceBengaluru ? `
-                        <div class="original-price">₹${offer.priceBengaluru.toLocaleString('en-IN')}</div>
-                        <div class="final-price">₹${(offer.finalPriceBengaluru || offer.priceBengaluru).toLocaleString('en-IN')}</div>
-                        ${offer.targetUnitsBengaluru ? `<div class="target-units">${offer.targetUnitsBengaluru} units</div>` : ''}
-                      ` : '<div style="color: #ccc; font-size: 13px;">—</div>'}
-                    </div>
-                  </div>
-                  
-                  <div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px;">
-                    ${offer.discountPercent ? `<span class="discount-badge">${offer.discountPercent}% OFF</span>` : ''}
-                    ${offer.promoteOnAds ? `<span class="ads-badge">📢 Ads Active</span>` : ''}
-                  </div>
-                  
-                  <div class="insight-box">
-                    <p class="insight-text">💡 ${offer.whyItWorks}</p>
-                  </div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </div>
-        
-        ${month.financialTargets && month.financialTargets.length > 0 ? `
-          <div>
-            <div class="section-header">
-              <div class="section-line"></div>
-              <span class="section-title">Studio Targets</span>
-            </div>
-            <div class="targets-grid">
-              ${month.financialTargets.map(target => `
-                <div class="target-card">
-                  <div class="target-location">${target.location}</div>
-                  <div class="target-amount">${target.revenueTarget}</div>
-                  <div class="target-logic">${target.logic}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        ` : ''}
-      </div>
-    `;
-  });
-  
-  html += `</div>`;
-  
-  container.innerHTML = html;
-  document.body.appendChild(container);
-  
-  // Convert to canvas
-  const canvas = await html2canvas(container, {
-    scale: 2,
-    backgroundColor: '#ffffff',
-    logging: false,
-    useCORS: true
-  });
-  
-  document.body.removeChild(container);
-  
-  // Create PDF
   const pdf = new jsPDF('p', 'mm', 'a4');
-  const imgWidth = 210; // A4 width in mm
-  const pageHeight = 297; // A4 height in mm
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  let heightLeft = imgHeight;
-  let position = 0;
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const margin = 20;
+  const contentWidth = pageWidth - (margin * 2);
   
-  const imgData = canvas.toDataURL('image/png');
+  // Colors
+  const gold = [212, 175, 55] as const;
+  const dark = [26, 26, 26] as const;
+  const gray = [102, 102, 102] as const;
+  const lightGray = [200, 200, 200] as const;
   
-  pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
+  // Helper functions
+  const setColor = (color: readonly [number, number, number]) => {
+    pdf.setTextColor(color[0], color[1], color[2]);
+  };
   
-  while (heightLeft >= 0) {
-    position = heightLeft - imgHeight;
+  const setFillColor = (color: readonly [number, number, number]) => {
+    pdf.setFillColor(color[0], color[1], color[2]);
+  };
+  
+  // ========== COVER PAGE ==========
+  // Black background
+  pdf.setFillColor(10, 10, 10);
+  pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+  
+  // Gold accent bar at top
+  pdf.setFillColor(gold[0], gold[1], gold[2]);
+  pdf.rect(0, 0, pageWidth, 3, 'F');
+  
+  // Logo area
+  pdf.setFillColor(gold[0], gold[1], gold[2]);
+  pdf.roundedRect(margin, 25, 18, 18, 3, 3, 'F');
+  pdf.setFontSize(14);
+  pdf.setTextColor(10, 10, 10);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('57', margin + 9, 37, { align: 'center' });
+  
+  // Brand name
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(16);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('Physique 57', margin + 24, 33);
+  
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFontSize(8);
+  pdf.text('INDIA', margin + 24, 40);
+  
+  // Title section
+  setColor(gold);
+  pdf.setFontSize(9);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('STRATEGIC PLANNING DOCUMENT', margin, 75);
+  
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(36);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text('2026 Sales', margin, 95);
+  pdf.text('Masterplan', margin, 110);
+  
+  // Description
+  pdf.setTextColor(136, 136, 136);
+  pdf.setFontSize(11);
+  pdf.setFont('helvetica', 'normal');
+  const description = 'A comprehensive revenue strategy encompassing targeted offers, seasonal campaigns, and customer lifecycle optimization across all studio locations.';
+  const descLines = pdf.splitTextToSize(description, 120);
+  pdf.text(descLines, margin, 130);
+  
+  // Stats
+  const statsY = 180;
+  pdf.setDrawColor(34, 34, 34);
+  pdf.line(margin, statsY - 15, pageWidth - margin, statsY - 15);
+  
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(32);
+  pdf.setFont('helvetica', 'bold');
+  pdf.text(String(exportData.length), margin, statsY + 10);
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFontSize(8);
+  pdf.text('MONTHS', margin, statsY + 18);
+  
+  const totalOffers = exportData.reduce((acc, m) => acc + m.offers.filter(o => !o.cancelled).length, 0);
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(32);
+  pdf.text(String(totalOffers), margin + 50, statsY + 10);
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFontSize(8);
+  pdf.text('ACTIVE OFFERS', margin + 50, statsY + 18);
+  
+  pdf.setTextColor(255, 255, 255);
+  pdf.setFontSize(32);
+  pdf.text('3', margin + 110, statsY + 10);
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFontSize(8);
+  pdf.text('STUDIOS', margin + 110, statsY + 18);
+  
+  // Footer date
+  pdf.setTextColor(68, 68, 68);
+  pdf.setFontSize(9);
+  pdf.text(new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }), pageWidth - margin, pageHeight - 30, { align: 'right' });
+  pdf.setFontSize(8);
+  pdf.text('CONFIDENTIAL', pageWidth - margin, pageHeight - 22, { align: 'right' });
+  
+  // ========== MONTH PAGES ==========
+  exportData.forEach((month, index) => {
     pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
-  }
+    
+    const activeOffers = month.offers.filter(o => !o.cancelled);
+    
+    // White background
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, pageWidth, pageHeight, 'F');
+    
+    // Month indicator box
+    pdf.setFillColor(dark[0], dark[1], dark[2]);
+    pdf.roundedRect(margin, 20, 22, 22, 4, 4, 'F');
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(month.name.substring(0, 3).toUpperCase(), margin + 11, 31, { align: 'center' });
+    pdf.setFontSize(7);
+    pdf.setTextColor(180, 180, 180);
+    pdf.text('2026', margin + 11, 38, { align: 'center' });
+    
+    // Month title
+    setColor(dark);
+    pdf.setFontSize(22);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(month.name, margin + 30, 28);
+    
+    setColor(gold);
+    pdf.setFontSize(11);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(month.theme, margin + 30, 36);
+    
+    // Summary
+    setColor(gray);
+    pdf.setFontSize(9);
+    const summaryLines = pdf.splitTextToSize(month.summary, contentWidth - 60);
+    pdf.text(summaryLines, margin + 30, 44);
+    
+    // Revenue target box
+    pdf.setFillColor(248, 248, 248);
+    pdf.roundedRect(pageWidth - margin - 45, 20, 45, 25, 3, 3, 'F');
+    pdf.setTextColor(136, 136, 136);
+    pdf.setFontSize(7);
+    pdf.text('REVENUE TARGET', pageWidth - margin - 40, 28);
+    setColor(dark);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text(month.revenueTargetTotal || '', pageWidth - margin - 40, 38);
+    
+    // Offers section header
+    let yPos = 65;
+    
+    setColor(gold);
+    pdf.setFillColor(gold[0], gold[1], gold[2]);
+    pdf.rect(margin, yPos, 8, 2, 'F');
+    
+    setColor(dark);
+    pdf.setFontSize(9);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('STRATEGIC OFFERS', margin + 12, yPos + 2);
+    
+    pdf.setFillColor(245, 245, 245);
+    pdf.roundedRect(margin + 55, yPos - 3, 25, 8, 2, 2, 'F');
+    setColor(gray);
+    pdf.setFontSize(7);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`${activeOffers.length} Active`, margin + 67, yPos + 2, { align: 'center' });
+    
+    yPos += 15;
+    
+    // Offers grid
+    activeOffers.forEach((offer, oIndex) => {
+      if (yPos > 250) {
+        pdf.addPage();
+        yPos = 25;
+      }
+      
+      const cardHeight = 55;
+      const cardWidth = (contentWidth - 8) / 2;
+      const xPos = oIndex % 2 === 0 ? margin : margin + cardWidth + 8;
+      
+      if (oIndex % 2 === 0 && oIndex > 0) {
+        yPos += cardHeight + 8;
+      }
+      
+      if (yPos > 250) {
+        pdf.addPage();
+        yPos = 25;
+      }
+      
+      // Card background
+      pdf.setFillColor(250, 250, 250);
+      pdf.setDrawColor(235, 235, 235);
+      pdf.roundedRect(xPos, yPos, cardWidth, cardHeight, 3, 3, 'FD');
+      
+      // Type badge
+      const typeColors: {[key: string]: [number, number, number]} = {
+        'Hero': [212, 175, 55],
+        'New': [8, 145, 178],
+        'Flash': [180, 83, 9],
+        'Retention': [5, 150, 105],
+        'Event': [190, 24, 93],
+        'Lapsed': [82, 82, 82]
+      };
+      const typeColor = typeColors[offer.type] || typeColors['New'];
+      setColor(typeColor);
+      pdf.setFontSize(6);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(offer.type.toUpperCase(), xPos + 4, yPos + 8);
+      
+      // Offer title
+      setColor(dark);
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'bold');
+      const titleLines = pdf.splitTextToSize(offer.title, cardWidth - 10);
+      pdf.text(titleLines.slice(0, 2), xPos + 4, yPos + 16);
+      
+      // Prices
+      const priceY = yPos + 30;
+      
+      // Mumbai
+      pdf.setTextColor(136, 136, 136);
+      pdf.setFontSize(6);
+      pdf.text('MUMBAI', xPos + 4, priceY);
+      if (offer.priceMumbai) {
+        setColor(dark);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`₹${(offer.finalPriceMumbai || offer.priceMumbai).toLocaleString('en-IN')}`, xPos + 4, priceY + 6);
+        if (offer.targetUnitsMumbai) {
+          setColor(gold);
+          pdf.setFontSize(6);
+          pdf.text(`${offer.targetUnitsMumbai} units`, xPos + 4, priceY + 12);
+        }
+      }
+      
+      // Bengaluru
+      pdf.setTextColor(136, 136, 136);
+      pdf.setFontSize(6);
+      pdf.text('BENGALURU', xPos + cardWidth/2, priceY);
+      if (offer.priceBengaluru) {
+        setColor(dark);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`₹${(offer.finalPriceBengaluru || offer.priceBengaluru).toLocaleString('en-IN')}`, xPos + cardWidth/2, priceY + 6);
+        if (offer.targetUnitsBengaluru) {
+          setColor(gold);
+          pdf.setFontSize(6);
+          pdf.text(`${offer.targetUnitsBengaluru} units`, xPos + cardWidth/2, priceY + 12);
+        }
+      }
+      
+      // Discount badge
+      if (offer.discountPercent) {
+        pdf.setFillColor(254, 243, 199);
+        pdf.roundedRect(xPos + 4, yPos + cardHeight - 10, 18, 6, 1, 1, 'F');
+        pdf.setTextColor(180, 83, 9);
+        pdf.setFontSize(5);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`${offer.discountPercent}% OFF`, xPos + 6, yPos + cardHeight - 6);
+      }
+    });
+    
+    // Studio targets section (if exists)
+    if (month.financialTargets && month.financialTargets.length > 0) {
+      yPos += 70;
+      
+      if (yPos > 230) {
+        pdf.addPage();
+        yPos = 25;
+      }
+      
+      setColor(gold);
+      pdf.setFillColor(gold[0], gold[1], gold[2]);
+      pdf.rect(margin, yPos, 8, 2, 'F');
+      
+      setColor(dark);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('STUDIO TARGETS', margin + 12, yPos + 2);
+      
+      yPos += 15;
+      
+      const targetWidth = (contentWidth - 16) / 3;
+      month.financialTargets.forEach((target, tIndex) => {
+        const txPos = margin + (tIndex * (targetWidth + 8));
+        
+        pdf.setFillColor(250, 250, 250);
+        pdf.setDrawColor(235, 235, 235);
+        pdf.roundedRect(txPos, yPos, targetWidth, 35, 3, 3, 'FD');
+        
+        pdf.setTextColor(136, 136, 136);
+        pdf.setFontSize(7);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(target.location.toUpperCase(), txPos + targetWidth/2, yPos + 10, { align: 'center' });
+        
+        setColor(dark);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(target.revenueTarget, txPos + targetWidth/2, yPos + 22, { align: 'center' });
+        
+        setColor(gray);
+        pdf.setFontSize(6);
+        pdf.setFont('helvetica', 'normal');
+        const logicLines = pdf.splitTextToSize(target.logic || '', targetWidth - 8);
+        pdf.text(logicLines.slice(0, 1), txPos + targetWidth/2, yPos + 30, { align: 'center' });
+      });
+    }
+  });
   
-  const filename = scope === 'current' && currentMonth 
-    ? `Physique57_${currentMonth.name}_Plan_${new Date().toISOString().split('T')[0]}.pdf`
-    : `Physique57_2026_Sales_Plan_${new Date().toISOString().split('T')[0]}.pdf`;
-  
-  pdf.save(filename);
+  // Save PDF
+  pdf.save(`Physique57_Sales_Plan_${scope === 'all' ? 'Full' : currentMonth?.name || 'Current'}_${new Date().toISOString().split('T')[0]}.pdf`);
 }
 
 // Generate Word Document Export
