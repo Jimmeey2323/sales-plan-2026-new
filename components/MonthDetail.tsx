@@ -236,7 +236,7 @@ export const MonthDetail: React.FC<MonthDetailProps> = ({ data, hideCancelled = 
         <motion.div variants={item} className="space-y-4">
           <div className="flex items-center gap-3 text-brand-600">
             <CalendarDays className="w-6 h-6" />
-            <span className="text-sm font-bold uppercase tracking-widest">2026 Sales Masterplan</span>
+            <span className="text-sm font-bold uppercase tracking-widest">2026 Sales Plan</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900">
             {data.name}: <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-purple-600">{data.theme}</span>
