@@ -909,8 +909,14 @@ export const ExecutionPlan: React.FC<ExecutionPlanProps> = ({ month }) => {
               </div>
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Last Year</span>
             </div>
-            <div className="text-2xl font-bold text-slate-900 mb-2">{formatIndianCurrency(totalLast2025Revenue)}</div>
-            <div className="text-sm text-slate-600">2025 achievement</div>
+            <div className="text-2xl font-bold text-slate-900 mb-2">
+              {formatIndianCurrency(
+                getMonthRevenue2025('Kwality', month.name) + 
+                getMonthRevenue2025('Supreme', month.name) + 
+                getMonthRevenue2025('Kenkere', month.name)
+              )}
+            </div>
+            <div className="text-sm text-slate-600">2025 {month.name}</div>
           </div>
 
           {/* Card 3: Projected Revenue */}

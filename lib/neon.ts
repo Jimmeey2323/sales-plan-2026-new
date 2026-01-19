@@ -8,9 +8,11 @@ if (!DATABASE_URL) {
   console.error('⚠️ VITE_DATABASE_URL environment variable is not set!');
 }
 
+console.log('🔌 Neon database connection URL:', DATABASE_URL.replace(/:[^:@]+@/, ':***@')); // Hide password
+
 const sql = neon(DATABASE_URL);
 
-console.log('🔌 Neon database connection initialized');
+console.log('✅ Neon database client initialized');
 
 // Initialize database schema
 export async function initializeDatabase() {
@@ -35,30 +37,22 @@ export async function initializeDatabase() {
 // Save sales data to Neon
 export async function saveSalesData(data: any) {
   try {
-    // Check if data exists
-    const existing = await sql`SELECT id FROM sales_data LIMIT 1`;
+    console.log('🔄 Starting Neon save operation...');
     
-    if (existing.length > 0) {
-      // Update existing data
-      await sql`
-        UPDATE sales_data 
-        SET data = ${JSON.stringify(data)}, 
-            updated_at = CURRENT_TIMESTAMP 
-        WHERE id = ${existing[0].id}
-      `;
-      console.log('💾 Data updated in Neon database');
-    } else {
-      // Insert new data
-      await sql`
-        INSERT INTO sales_data (data) 
-        VALUES (${JSON.stringify(data)})
-      `;
-      console.log('💾 Data saved to Neon database (first time)');
-    }
+    // Always insert as a new record to maintain history
+    const result = await sql`
+      INSERT INTO sales_data (data) 
+      VALUES (${JSON.stringify(data)})
+      RETURNING id, updated_at
+    `;
     
-    return { success: true };
+    console.log('💾 Data saved to Neon database, new record ID:', result[0].id);
+    console.log('⏰ Created timestamp:', result[0]?.updated_at);
+    
+    return { success: true, action: 'inserted', id: result[0].id };
   } catch (error) {
     console.error('❌ Error saving to database:', error);
+    console.error('❌ Error details:', JSON.stringify(error, null, 2));
     return { success: false, error };
   }
 }

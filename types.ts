@@ -7,10 +7,26 @@ export interface FinancialTarget {
   logic: string;
 }
 
+export interface PackageDetail {
+  name: string;
+  hostId: number;
+  price: number;
+  validity: number;
+  validityUnit: string;
+  noOfSessions: number;
+  freezeAttempts: number;
+  freezeDuration: number;
+  tax: number;
+  priceAfterTax: number;
+  discount?: number;
+  location: string;
+  studio: string;
+}
+
 export interface Offer {
   id?: string; // Optional for initial data, required for state
   title: string;
-  type: 'New' | 'Hero' | 'Retention' | 'Flash' | 'Event' | 'Student' | 'Corporate' | 'Lapsed' | 'Frequency Builder' | 'Hero Long-Term' | 'Event-Led Conversion' | 'Gamified Lead Capture' | 'Retention + Annual Push' | 'Ultra-VIP' | 'High-Touch Program';
+  type: 'New' | 'Hero' | 'Retention' | 'Flash' | 'Event' | 'Student' | 'Corporate' | 'Lapsed' | 'Frequency Builder' | 'Hero Long-Term' | 'Event-Led Conversion' | 'Gamified Lead Capture' | 'Retention + Annual Push' | 'Ultra-VIP' | 'High-Touch Program' | 'Hero Commitment' | 'Daily Flash Sale' | 'Premium Retention' | 'Referral Program' | 'Flash Sale Event' | 'Accountability Challenge' | 'Interactive Gamification' | 'Value-Add Bonus';
   description: string;
   pricing: string;
   priceMumbai?: number;
@@ -27,6 +43,17 @@ export interface Offer {
   promoteOnAds?: boolean; // Toggle for Meta/Google ads promotion
   marketingCollateral?: string; // Email, WhatsApp, in-studio promotions
   operationalSupport?: string; // Freebies, challenges, events
+  // Detailed package information
+  packages?: PackageDetail[]; // Detailed package breakdowns
+  validityPeriod?: string; // e.g., "30 days", "90 days"
+  validitySessions?: number; // Number of sessions if applicable
+  freezeAttempts?: number; // Number of freeze attempts allowed
+  freezeDuration?: number; // Total freeze duration in days
+  revenueForecast?: {
+    mumbai?: string;
+    bengaluru?: string;
+    total?: string;
+  };
   // New collateral selection fields
   collateralChannels?: {
     whatsapp?: boolean;

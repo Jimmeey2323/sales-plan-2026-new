@@ -4,6 +4,7 @@ import { YearOverview } from './components/YearOverview';
 import { SalesProvider, useSalesData } from './context/SalesContext';
 import { AdminProvider, useAdmin } from './context/AdminContext';
 import { AdminLoginModal } from './components/AdminLoginModal';
+import { AdminStatusBar } from './components/AdminStatusBar';
 import { 
   ChevronRight,
   ChevronLeft,
@@ -23,7 +24,8 @@ import {
   Mail,
   Shield,
   Eye,
-  Menu
+  Menu,
+  Save
 } from 'lucide-react';
 import { MonthData } from './types';
 import { exportToPDF, exportToWord, exportToImage, copyEmailToClipboard } from './lib/exports';
@@ -301,7 +303,7 @@ const ExportModal: React.FC<{
 };
 
 const DashboardContent: React.FC = () => {
-  const { data, resetData, isLoading } = useSalesData();
+  const { data, resetData, isLoading, hasUnsavedChanges, saveAllChanges, saveStatus } = useSalesData();
   const { isAdmin, logout, setShowLoginModal } = useAdmin();
   const [selectedMonthId, setSelectedMonthId] = useState<string>('jan');
   const [showExportModal, setShowExportModal] = useState(false);
@@ -342,6 +344,8 @@ const DashboardContent: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-900">
+      {/* Status Bar */}
+      <AdminStatusBar />
       
       {/* Collapsible Sidebar Navigation */}
       <aside 
@@ -416,6 +420,19 @@ const DashboardContent: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Save All Changes Button */}
+        {!sidebarCollapsed && isAdmin && hasUnsavedChanges && saveStatus !== 'saving' && (
+          <div className="px-3 pt-3">
+            <button
+              onClick={saveAllChanges}
+              className="w-full px-4 py-2.5 rounded-lg border border-slate-300 bg-slate-800 hover:bg-slate-900 text-white flex items-center justify-center gap-2 text-sm font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <Save className="w-4 h-4" />
+              <span>Save All Changes</span>
+            </button>
+          </div>
+        )}
 
         {/* Tab Navigation */}
         <div className={`px-3 pt-4 pb-2 ${sidebarCollapsed ? 'hidden' : 'block'}`}>

@@ -352,15 +352,21 @@ export const OfferCard: React.FC<OfferCardProps> = ({ offer, monthId }) => {
             </div>
           )}
 
-          {/* Ad Promotion Toggle */}
+        {/* Ad Promotion Toggle */}
           {!offer.cancelled && (
-            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-between pt-3 border-t border-gray-100"
+            >
               <div className="flex items-center gap-2">
                 <Megaphone className="w-4 h-4 text-gray-400" />
                 <span className="text-xs font-medium text-gray-600">Promote on Ads</span>
               </div>
               <button
-                onClick={handleAdToggle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAdToggle();
+                }}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 ${
                   offer.promoteOnAds ? 'bg-brand-600' : 'bg-gray-200'
                 }`}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Offer } from '../types';
-import { X, Tag, TrendingUp, Users, Zap, Award, Briefcase, GraduationCap, History, Megaphone, MapPin } from 'lucide-react';
+import { X, Tag, TrendingUp, Users, Zap, Award, Briefcase, GraduationCap, History, Megaphone, MapPin, Package, Target, BarChart3, Clock } from 'lucide-react';
+import { formatCurrency, formatCurrencyFull, formatNumber } from '../lib/formatters';
 
 interface OfferDetailModalProps {
   offer: Offer | null;
@@ -98,6 +99,109 @@ export const OfferDetailModal: React.FC<OfferDetailModalProps> = ({ offer, isOpe
             </div>
           </div>
 
+          {/* Key Details Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {offer.validityPeriod && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-semibold text-gray-600">VALIDITY</span>
+                </div>
+                <p className="text-sm font-bold text-gray-900">{offer.validityPeriod}</p>
+              </div>
+            )}
+            
+            {offer.validitySessions && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Package className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-semibold text-gray-600">SESSIONS</span>
+                </div>
+                <p className="text-sm font-bold text-gray-900">{formatNumber(offer.validitySessions)}</p>
+              </div>
+            )}
+            
+            {offer.freezeAttempts !== undefined && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-semibold text-gray-600">FREEZES</span>
+                </div>
+                <p className="text-sm font-bold text-gray-900">{offer.freezeAttempts} attempts</p>
+              </div>
+            )}
+            
+            {(offer.targetUnitsMumbai || offer.targetUnitsBengaluru || offer.targetUnits) && (
+              <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Target className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-semibold text-gray-600">TARGET UNITS</span>
+                </div>
+                <p className="text-sm font-bold text-gray-900">
+                  {offer.targetUnitsMumbai && offer.targetUnitsBengaluru 
+                    ? `${offer.targetUnitsMumbai}+${offer.targetUnitsBengaluru}`
+                    : offer.targetUnits
+                  }
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Operational Support */}
+          {offer.operationalSupport && (
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-amber-900 mb-3 flex items-center gap-2">
+                <Briefcase className="w-4 h-4" />
+                Operational Support
+              </h3>
+              <p className="text-sm text-amber-800">{offer.operationalSupport}</p>
+            </div>
+          )}
+
+          {/* Package Details */}
+          {offer.packages && offer.packages.length > 0 && (
+            <div className="border border-gray-200 rounded-xl overflow-hidden">
+              <div className="bg-gray-50 px-5 py-3 border-b border-gray-200">
+                <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                  <Package className="w-4 h-4" />
+                  Available Packages
+                </h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Package Name</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Price</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Sessions</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Validity</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Freezes</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">After Tax</th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">Location</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {offer.packages.map((pkg, idx) => (
+                      <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-4 py-3 text-gray-900 font-medium">{pkg.name}</td>
+                        <td className="px-4 py-3 text-gray-700">{formatCurrencyFull(pkg.price)}</td>
+                        <td className="px-4 py-3 text-gray-700">{pkg.noOfSessions || '-'}</td>
+                        <td className="px-4 py-3 text-gray-700">{pkg.validity} {pkg.validityUnit}</td>
+                        <td className="px-4 py-3 text-gray-700">{pkg.freezeAttempts || '-'}</td>
+                        <td className="px-4 py-3 font-semibold text-gray-900">{formatCurrencyFull(pkg.priceAfterTax)}</td>
+                        <td className="px-4 py-3">
+                          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">
+                            {pkg.location === 'Mumbai' ? 'MUM' : pkg.location === 'Bengaluru' ? 'BLR' : pkg.location}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
           {/* Pricing Details */}
           {hasLocationPricing ? (
             <div>
@@ -174,7 +278,7 @@ export const OfferDetailModal: React.FC<OfferDetailModalProps> = ({ offer, isOpe
                         <div>
                           <div className="text-xs text-gray-500 mb-1">Projected Revenue</div>
                           <div className="text-xl font-bold text-gray-900">
-                            ₹{((offer.finalPriceMumbai || offer.priceMumbai) * (typeof (offer.targetUnitsMumbai || offer.targetUnits) === 'number' ? (offer.targetUnitsMumbai || offer.targetUnits) : parseInt((offer.targetUnitsMumbai || offer.targetUnits) as string) || 0)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                            {formatCurrency((offer.finalPriceMumbai || offer.priceMumbai) * (typeof (offer.targetUnitsMumbai || offer.targetUnits) === 'number' ? (offer.targetUnitsMumbai || offer.targetUnits) : parseInt((offer.targetUnitsMumbai || offer.targetUnits) as string) || 0))}
                           </div>
                         </div>
                       </div>
@@ -222,7 +326,7 @@ export const OfferDetailModal: React.FC<OfferDetailModalProps> = ({ offer, isOpe
                         <div>
                           <div className="text-xs text-gray-500 mb-1">Projected Revenue</div>
                           <div className="text-xl font-bold text-gray-900">
-                            ₹{((offer.finalPriceBengaluru || offer.priceBengaluru) * (typeof (offer.targetUnitsBengaluru || offer.targetUnits) === 'number' ? (offer.targetUnitsBengaluru || offer.targetUnits) : parseInt((offer.targetUnitsBengaluru || offer.targetUnits) as string) || 0)).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                            {formatCurrency((offer.finalPriceBengaluru || offer.priceBengaluru) * (typeof (offer.targetUnitsBengaluru || offer.targetUnits) === 'number' ? (offer.targetUnitsBengaluru || offer.targetUnits) : parseInt((offer.targetUnitsBengaluru || offer.targetUnits) as string) || 0))}
                           </div>
                         </div>
                       </div>
@@ -240,6 +344,36 @@ export const OfferDetailModal: React.FC<OfferDetailModalProps> = ({ offer, isOpe
               <h3 className="text-sm font-semibold text-gray-700 mb-3">Pricing</h3>
               <div className={`text-xl font-semibold ${offer.cancelled ? 'text-gray-500' : 'text-gray-900'}`}>
                 {offer.pricing}
+              </div>
+            </div>
+          )}
+
+          {/* Revenue Forecast */}
+          {offer.revenueForecast && (
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-5">
+              <h3 className="text-sm font-semibold text-green-900 mb-4 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
+                Revenue Forecast
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {offer.revenueForecast.mumbai && (
+                  <div className="bg-white/60 rounded-lg p-3">
+                    <p className="text-xs text-green-700 font-semibold mb-1">Mumbai</p>
+                    <p className="text-lg font-bold text-green-900">{offer.revenueForecast.mumbai}</p>
+                  </div>
+                )}
+                {offer.revenueForecast.bengaluru && (
+                  <div className="bg-white/60 rounded-lg p-3">
+                    <p className="text-xs text-green-700 font-semibold mb-1">Bengaluru</p>
+                    <p className="text-lg font-bold text-green-900">{offer.revenueForecast.bengaluru}</p>
+                  </div>
+                )}
+                {offer.revenueForecast.total && (
+                  <div className="bg-green-100 rounded-lg p-3">
+                    <p className="text-xs text-green-900 font-semibold mb-1">TOTAL</p>
+                    <p className="text-lg font-bold text-green-900">{offer.revenueForecast.total}</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

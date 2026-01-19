@@ -29,6 +29,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({ initialData, isOpen, onClo
     targetUnitsBengaluru: '',
     marketingCollateral: '',
     operationalSupport: '',
+    promoteOnAds: false,
     collateralChannels: {
       email: true,
       whatsapp: true,
@@ -41,8 +42,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({ initialData, isOpen, onClo
       imageCreative: true,
       tentCards: true,
       videoCreative: false,
-      easelStandee: false,
-      emailTemplate: false,
+      easelStandee: true,
+      emailTemplate: true,
       landingPage: false,
       socialPosts: false,
       storyTemplate: false
@@ -69,6 +70,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({ initialData, isOpen, onClo
         targetUnitsBengaluru: '',
         marketingCollateral: '',
         operationalSupport: '',
+        promoteOnAds: false,
         collateralChannels: {
           email: true,
           whatsapp: true,
@@ -81,8 +83,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({ initialData, isOpen, onClo
           imageCreative: true,
           tentCards: true,
           videoCreative: false,
-          easelStandee: false,
-          emailTemplate: false,
+          easelStandee: true,
+          emailTemplate: true,
           landingPage: false,
           socialPosts: false,
           storyTemplate: false
